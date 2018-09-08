@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Test;
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * Tests project 2 as specified by:
@@ -79,16 +80,17 @@ public class Project02Test {
   /**
    * Returns the main method from the proper class
    */
-  private static Class<?> getMain() {
+  private static Class<?> getMain(ArrayList<String> toTest) {
     Class<?> cls;
     try {
-      cls = Class.forName("osu.cse1223.Project02");
+      cls = Class.forName(toTest.get(0));
     } catch (ClassNotFoundException e) {
-      try {
-        cls = Class.forName("Project02");
-      } catch (ClassNotFoundException e1) {
+      System.err.println("Failed to find the class: " + toTest.get(0));
+      toTest.remove(0);
+      if (!toTest.isEmpty()) {
+        cls = getMain(toTest);
+      } else {
         cls = null;
-        System.err.println("Failed to find Project02");
         System.exit(1);
       }
     }
@@ -98,8 +100,8 @@ public class Project02Test {
   /**
    * Runs the main method of the test class
    */
-  private static void runMain() {
-    Class<?> cls = getMain();
+  private static void runMain(ArrayList<String> toTest) {
+    Class<?> cls = getMain(toTest);
     try {
       Method meth = cls.getMethod("main", String[].class);
       String[] params = null;
@@ -117,13 +119,25 @@ public class Project02Test {
   }
   
   /**
+   * Generates a list of test classes.
+   * Add test cases to this list as you find them.
+   */
+  public ArrayList<String> getTestClasses() {
+    ArrayList<String> toTest = new ArrayList<String>();
+    toTest.add("osu.cse1223.Project02");
+    toTest.add("Project02");
+    toTest.add("cse1223.Project02");
+    return toTest;
+  }
+  
+  /**
    * A helper method which allows us to rapidly build test cases.
    */
   public void runCase(String fullString, String substring, int position, String replacement) {
     String input = constructInput(fullString, substring, position, replacement);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
-    runMain();
+    runMain(getTestClasses());
     String solution = buildSolution(fullString, substring, position, replacement);
     assertEquals(solution.trim(), outContent.toString().trim());
   }
