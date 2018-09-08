@@ -125,8 +125,11 @@ public class Project02Test {
   public ArrayList<String> getTestClasses() {
     ArrayList<String> toTest = new ArrayList<String>();
     toTest.add("osu.cse1223.Project02");
+    toTest.add("osu.cse1223.project02");
+    toTest.add("cse1223.Project02");    
+    toTest.add("cse1223.project02");
     toTest.add("Project02");
-    toTest.add("cse1223.Project02");
+    toTest.add("project02");
     return toTest;
   }
   
