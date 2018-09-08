@@ -79,8 +79,8 @@ public class Project02Test {
   /**
    * Returns the main method from the proper class
    */
-  private static Class getMain() {
-    Class cls;
+  private static Class<?> getMain() {
+    Class<?> cls;
     try {
       cls = Class.forName("osu.cse1223.Project02");
     } catch (ClassNotFoundException e) {
@@ -99,7 +99,7 @@ public class Project02Test {
    * Runs the main method of the test class
    */
   private static void runMain() {
-    Class cls = getMain();
+    Class<?> cls = getMain();
     try {
       Method meth = cls.getMethod("main", String[].class);
       String[] params = null;
