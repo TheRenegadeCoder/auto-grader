@@ -48,7 +48,7 @@ public class Project02Test {
       "Starting position of your substring in string: " + substringStart,
       "String before your substring: " + beforeSubstring,
       "String after your substring: " + afterSubstring,
-      "Enter a position between 0 and " + fullString.length() + ":",
+      "Enter a position between 0 and " + (fullString.length() - 1) + ":",
       "The character at position " + position + " is " + fullString.charAt(position),
       "Enter a replacement string: ",
       "Your new string is: " + replacedString
