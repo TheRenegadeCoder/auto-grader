@@ -124,13 +124,23 @@ public class Project02Test {
    */
   public ArrayList<String> getTestClasses() {
     ArrayList<String> toTest = new ArrayList<String>();
-    toTest.add("osu.cse1223.Project02");
+    toTest.add("osu.cse1223.Project02"); // Typical package
     toTest.add("osu.cse1223.project02");
+    toTest.add("osu.cse1223.project2");
     toTest.add("cse1223.Project02");    
     toTest.add("cse1223.project02");
-    toTest.add("Project02");
-    toTest.add("project02");
+    toTest.add("Project02"); // Typical packageless
+    toTest.add("project02"); // Typical unconventional packageless 
+    toTest.add("project2"); // Atypical unconventional packageless
     return toTest;
+  }
+  
+  /**
+   * Removes all newlines and spaces, so strings can be
+   * compared on a content basis.
+   */
+  public String reduceString(String input) {
+    return input.replace("\n", "").replaceAll("\\s+", "");
   }
   
   /**
@@ -142,7 +152,7 @@ public class Project02Test {
     System.setIn(inContent);
     runMain(getTestClasses());
     String solution = buildSolution(fullString, substring, position, replacement);
-    assertEquals(solution.trim(), outContent.toString().trim());
+    assertEquals(reduceString(solution), reduceString(outContent.toString()));
   }
   
   /**
