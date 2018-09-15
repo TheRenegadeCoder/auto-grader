@@ -146,7 +146,7 @@ public class Project03Test {
       }
     }
     solutionList.add("You got " + correct + " correct answers");
-    solutionList.add("That's " + ((double) correct) / equations.length * 100 + "%");
+    solutionList.add("That's " + ((double) correct) / equations.length * 100 + "%!");
     return String.join("\n", solutionList);
   }
   
