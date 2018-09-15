@@ -245,16 +245,17 @@ public class Project03Test {
   }
   
   /**
-   * Naively parses the users solution for a pair of numbers
+   * Parses the users solution for a pair of numbers
    * surrounding the addition equation. 
    * 
    * @param output the users solution
    * @return an array containing the first and second number from parsing
    */
   private int[] getIntegers(String output) {
-    int i = output.indexOf("+");
-    int first = Integer.parseInt(output.substring(i - 3, i).trim());
-    int second = Integer.parseInt(output.substring(i + 1, i + 4).trim());
+    String digits = output.replaceAll("[^-?0-9]+", " "); 
+    String[] integers = digits.trim().split(" ");
+    int first = Integer.parseInt(integers[0]);
+    int second = Integer.parseInt(integers[1]);
     return new int[] {first, second};
   }
   
