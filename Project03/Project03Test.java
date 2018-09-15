@@ -143,6 +143,7 @@ public class Project03Test {
         correct++;
       } else {
         solutionList.add("Wrong!");
+        solutionList.add("The correct answer is " + equation.getResult());
       }
     }
     solutionList.add("You got " + correct + " correct answers");
