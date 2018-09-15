@@ -7,10 +7,10 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /**
- * Tests project 2 as specified by:
- * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project02.html
+ * Tests project 3 as specified by:
+ * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project03.html
  * 
- * This test file verifies that the Project 2 solution passes on the basis of
+ * This test file verifies that the Project 3 solution passes on the basis of
  * content rather than structure. In other words, we don't care if the output
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
