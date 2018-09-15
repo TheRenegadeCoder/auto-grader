@@ -221,12 +221,14 @@ public class Project03Test {
   public ArrayList<String> getTestClasses() {
     ArrayList<String> toTest = new ArrayList<String>();
     toTest.add("osu.cse1223.Project03"); // Typical package
+    toTest.add("osu.cse1223.Project3");
     toTest.add("osu.cse1223.project03");
     toTest.add("osu.cse1223.project3");
     toTest.add("cse1223.Project03");    
     toTest.add("cse1223.project03");
     toTest.add("Project03"); // Typical packageless
     toTest.add("project03"); // Typical unconventional packageless 
+    toTest.add("Project3"); // Atypical unconventional packageless
     toTest.add("project3"); // Atypical unconventional packageless
     return toTest;
   }
