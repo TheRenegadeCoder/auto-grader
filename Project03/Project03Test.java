@@ -224,8 +224,13 @@ public class Project03Test {
     toTest.add("osu.cse1223.Project3");
     toTest.add("osu.cse1223.project03");
     toTest.add("osu.cse1223.project3");
+    toTest.add("osu.cse1223.project03a");
+    toTest.add("osu.cse1223.Project03a");
+    toTest.add("osu.cse1223.CSEProject03");
+    toTest.add("cse1223.Project03a");
     toTest.add("cse1223.Project03");    
     toTest.add("cse1223.project03");
+    toTest.add("project03.Project03");
     toTest.add("Project03"); // Typical packageless
     toTest.add("project03"); // Typical unconventional packageless 
     toTest.add("Project3"); // Atypical unconventional packageless
