@@ -204,12 +204,17 @@ public class Project04Test {
    * @param userDragon the lowercase generated dragon type string
    * @return the expected solution string 
    */
-  private String buildSolution(Dragon guessDragon, String userDragon) {
+  private String buildSolution(String guessDragon, String userDragon) {
+    Dragon guessDragonType = getDragonType(guessDragon);
     ArrayList<String> solutionList = new ArrayList<String>();
     solutionList.add("Please select one of your dragons [Fire/Plant/Water]:");
-    solutionList.add(String.format("You chose: %s dragon", guessDragon));
+    if (guessDragonType == Dragon.NONE) {
+      solutionList.add(String.format("You don't have a %s dragon, so you choose no dragons.", guessDragon));
+    } else {
+      solutionList.add(String.format("You chose: %s dragon", guessDragonType));
+    }
     solutionList.add(String.format("I chose: %s dragon", userDragon));
-    solutionList.add(getComparisonResult(guessDragon, getDragonType(userDragon)));
+    solutionList.add(getComparisonResult(guessDragonType, getDragonType(userDragon)));
     return String.join("\n", solutionList);
   }
   
@@ -223,7 +228,7 @@ public class Project04Test {
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     runMain(getTestClasses(4));
-    String solution = buildSolution(getDragonType(dragonType), getGeneratedDragonType(outContent.toString()));
+    String solution = buildSolution(dragonType, getGeneratedDragonType(outContent.toString()));
     assertEquals(reduceString(solution), reduceString(outContent.toString()));
   }
   
@@ -345,5 +350,13 @@ public class Project04Test {
   @Test
   public void testAllCapsPlant() {
     runCase("PLANT");
+  }
+  
+  /**
+   * Tests the none dragon case.
+   */
+  @Test
+  public void testNone() {
+    runCase("q");
   }
 }
