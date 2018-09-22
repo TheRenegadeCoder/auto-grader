@@ -20,6 +20,9 @@ public class Project04Test {
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
   
+  /**
+   * A Dragon Type Enum.
+   */
   public enum Dragon {
     FIRE, WATER, PLANT, NONE;
   }
@@ -107,6 +110,7 @@ public class Project04Test {
    * Generates a list of test classes.
    * Add test cases to this list as you find them.
    * 
+   * @param project the current project number
    * @return an ArrayList of strings to test
    */
   private ArrayList<String> getTestClasses(int project) {
@@ -144,6 +148,8 @@ public class Project04Test {
   
   /**
    * Parse the user solution for their dragon.
+   *
+   * @param userSolution the user solution string
    */
   private String getGeneratedDragonType(String userSolution) {
     String lowercase = userSolution.toLowerCase();
@@ -154,6 +160,9 @@ public class Project04Test {
   
   /**
    * A helper method which converts a dragon string to an enum
+   *
+   * @param dragonType the type of the dragon as a string
+   * @return the dragon type as an enum
    */
   private Dragon getDragonType(String dragonType) {
     String uppercaseDragonType = dragonType.toUpperCase();
@@ -171,6 +180,10 @@ public class Project04Test {
   
   /**
    * Handles the rock paper scissors and returns the result.
+   * 
+   * @param guessDragon our guess dragon as an enum
+   * @param userDragon the generated dragon as an enum
+   * @return the result of the dragon game as a string
    */
   private String getComparisonResult(Dragon guessDragon, Dragon userDragon) {
     String result = "";
@@ -197,6 +210,12 @@ public class Project04Test {
     return result;
   }
   
+  /**
+   * Gets the number of solutions.
+   *
+   * @param output the user string
+   * @return the number of solutions
+   */
   private int numOfSolutions(String output) {
     int count = output.length() - output.replace("[", "").length();
     return count;
@@ -226,7 +245,7 @@ public class Project04Test {
   /**
    * A helper method which allows us to rapidly build test cases.
    * 
-   * @param dragon the dragon under test
+   * @param dragonType the dragon under test
    */
   private void runCase(String dragonType) {
     // Create multiple records just to test the extra credit
