@@ -139,23 +139,33 @@ public class Project04Test {
    * @return an input string stripped of all spaces and newlines
    */
   private String reduceString(String input) {
-    return input.replace("\n", "").replaceAll("\\s+", "");
+    return input.replace("\n", "").replaceAll("\\s+", "").toLowerCase();
   }
   
   /**
    * Parse the user solution for their dragon.
    */
-  private Dragon getGeneratedDragonType(String userSolution) {
+  private String getGeneratedDragonType(String userSolution) {
     String lowercase = userSolution.toLowerCase();
     int index = lowercase.lastIndexOf("dragon");
     String dragonType = lowercase.substring(index - 6, index);
-    return getDragonType(dragonType);
+    return dragonType;
   }
   
   /**
    * A helper method which converts a dragon string to an enum
    */
   private Dragon getDragonType(String dragonType) {
+    String uppercaseDragonType = dragonType.toUpperCase();
+    if (uppercaseDragonType.equals("F")) {
+      dragonType = "fire";
+    } else if (uppercaseDragonType.equals("P")) {
+      dragonType = "plant";
+    } else if (uppercaseDragonType.equals("W")) {
+      dragonType = "water"; 
+    } else if (dragonType.length() == 1) {
+      dragonType = "none";
+    }
     return Dragon.valueOf(dragonType.trim().toUpperCase());
   }
   
@@ -176,11 +186,11 @@ public class Project04Test {
     } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.PLANT) {
       result = String.format(defeatsString, Dragon.FIRE, Dragon.PLANT, winString);
     } else if (guessDragon == Dragon.WATER && userDragon == Dragon.PLANT) {
-      result = String.format(defeatsString, Dragon.WATER, Dragon.PLANT, loseString);
+      result = String.format(defeatsString, Dragon.PLANT, Dragon.WATER, loseString);
     } else if (guessDragon == Dragon.WATER && userDragon == Dragon.FIRE) {
       result = String.format(defeatsString, Dragon.WATER, Dragon.FIRE, winString);
     } else if (guessDragon == Dragon.PLANT && userDragon == Dragon.FIRE) {
-      result = String.format(defeatsString, Dragon.PLANT, Dragon.FIRE, loseString);
+      result = String.format(defeatsString, Dragon.FIRE, Dragon.PLANT, loseString);
     } else {
       result = String.format(defeatsString, Dragon.PLANT, Dragon.WATER, winString);
     }
@@ -194,12 +204,12 @@ public class Project04Test {
    * @param userDragon the lowercase generated dragon type string
    * @return the expected solution string 
    */
-  private String buildSolution(Dragon guessDragon, Dragon userDragon) {
+  private String buildSolution(Dragon guessDragon, String userDragon) {
     ArrayList<String> solutionList = new ArrayList<String>();
     solutionList.add("Please select one of your dragons [Fire/Plant/Water]:");
     solutionList.add(String.format("You chose: %s dragon", guessDragon));
     solutionList.add(String.format("I chose: %s dragon", userDragon));
-    solutionList.add(getComparisonResult(guessDragon, userDragon));
+    solutionList.add(getComparisonResult(guessDragon, getDragonType(userDragon)));
     return String.join("\n", solutionList);
   }
   
@@ -213,7 +223,7 @@ public class Project04Test {
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     runMain(getTestClasses(4));
-    String solution = buildSolution(getDragonType(dragonType), getGeneratedDragonType(inContent.toString()));
+    String solution = buildSolution(getDragonType(dragonType), getGeneratedDragonType(outContent.toString()));
     assertEquals(reduceString(solution), reduceString(outContent.toString()));
   }
   
