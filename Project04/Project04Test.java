@@ -269,41 +269,135 @@ public class Project04Test {
   /**
    * A helper method which allows us to rapidly build test cases.
    * 
-   * @param name the user's name
-   * @param guess our guess for each question
+   * @param dragon the dragon under test
    */
-  public void runCase(String name, int guess) {
-    String guessString = Integer.toString(guess);
-    String input = buildLines(name, guessString, guessString, guessString, guessString);
-    InputStream inContent = new ByteArrayInputStream(input.getBytes());
-    System.setIn(inContent);
+  public void runCase(String dragon) {
+    //String input = buildLines(name, guessString, guessString, guessString, guessString);
+    //InputStream inContent = new ByteArrayInputStream(input.getBytes());
+    //System.setIn(inContent);
     runMain(getTestClasses(4));
     int[] firstAndSecond = getIntegers(outContent.toString());
-    String solution = buildSolution(name, firstAndSecond[0], firstAndSecond[1], guess);
-    assertEquals(reduceString(solution), reduceString(outContent.toString()));
+    //String solution = buildSolution(name, firstAndSecond[0], firstAndSecond[1], guess);
+    //assertEquals(reduceString(solution), reduceString(outContent.toString()));
   }
   
   /**
-   * Tests a random guess of 2 for every answer
+   * Tests the Fire dragon case.
    */
   @Test
-  public void testMain01() {
-    runCase("Jeremy", 2);
+  public void testFire() {
+    runCase("Fire");
   }
   
   /**
-   * Tests a random guess of 5 for every answer
+   * Tests the abreviated Fire dragon case.
    */
   @Test
-  public void testMain02() {
-    runCase("Anastasia", 5);
+  public void testAbbreviatedFire() {
+    runCase("F");
   }
   
   /**
-   * Tests a random guess of 0 for every answer
+   * Tests the lowercase Fire dragon case.
    */
   @Test
-  public void testMain03() {
-    runCase("Anastasia", 0);
+  public void testLowercaseFire() {
+    runCase("fire");
+  }
+  
+  /**
+   * Tests the lowercase abbreviated Fire dragon case.
+   */
+  @Test
+  public void testLowercaseAbbreviatedFire() {
+    runCase("f");
+  }
+  
+  /**
+   * Tests the all caps Fire dragon case.
+   */
+  @Test
+  public void testAllCapsFire() {
+    runCase("FIRE");
+  }
+  
+  /**
+   * Tests the Water dragon case.
+   */
+  @Test
+  public void testWater() {
+    runCase("Water");
+  }
+  
+  /**
+   * Tests the abbreviated Water dragon case.
+   */
+  @Test
+  public void testAbbreviatedWater() {
+    runCase("W");
+  }
+  
+  /**
+   * Tests the lowercase Water dragon case.
+   */
+  @Test
+  public void testLowercaseWater() {
+    runCase("water");
+  }
+  
+  /**
+   * Tests the lowercase abbreviated Water dragon case.
+   */
+  @Test
+  public void testLowercaseAbbreviatedWater() {
+    runCase("w");
+  }
+  
+  /**
+   * Tests the All Caps Water dragon case.
+   */
+  @Test
+  public void testAllCapsWater() {
+    runCase("WATER");
+  }
+  
+  /**
+   * Tests the Plant dragon case.
+   */
+  @Test
+  public void testPlant() {
+    runCase("Plant");
+  }
+  
+  /**
+   * Tests the abbreviated Plant dragon case.
+   */
+  @Test
+  public void testAbbreviatedPlant() {
+    runCase("P");
+  }
+  
+  /**
+   * Tests the lowercase Plant dragon case.
+   */
+  @Test
+  public void testLowercasePlant() {
+    runCase("plant");
+  }
+  
+  /**
+   * Tests the lowercase abbreviated Plant dragon case.
+   */
+  @Test
+  public void testLowercaseAbbreviatedPlant() {
+    runCase("p");
+  }
+  
+  /**
+   * Tests the All Caps Plant dragon case.
+   */
+  @Test
+  public void testAllCapsPlant() {
+    runCase("PLANT");
   }
 }
