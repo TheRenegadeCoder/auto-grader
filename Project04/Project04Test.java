@@ -21,9 +21,7 @@ public class Project04Test {
   private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
   
   public enum Dragon {
-    FIRE,
-      WATER,
-      PLANT
+    FIRE, WATER, PLANT, NONE;
   }
   
   /**
@@ -147,11 +145,30 @@ public class Project04Test {
   /**
    * Parse the user solution for their dragon.
    */
-  private String getGeneratedDragon(String userSolution) {
+  private Dragon getGeneratedDragonType(String userSolution) {
     String lowercase = userSolution.toLowerCase();
     int index = lowercase.lastIndexOf("dragon");
     String dragonType = lowercase.substring(index - 6, index);
-    return dragonType.trim();
+    return getDragonType(dragonType);
+  }
+  
+  /**
+   * A helper method which converts a dragon string to an enum
+   */
+  private Dragon getDragonType(String dragonType) {
+    return Dragon.valueOf(dragonType.trim().toUpperCase());
+  }
+  
+  private String getComparisonResult(Dragon guessDragon, Dragon userDragon) {
+    String result = "";
+    if (guessDragon == Dragon.NONE) {
+      result = "You lose by default!";
+    } else if (guessDragon == userDragon) {
+      result = "A tie!";
+    } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.WATER) {
+      
+    }
+    return result;
   }
   
   /**
@@ -166,12 +183,7 @@ public class Project04Test {
     solutionList.add("Please select one of your dragons [Fire/Plant/Water]:");
     solutionList.add(String.format("You chose: %s dragon", guessDragon));
     solutionList.add(String.format("I chose: %s dragon", userDragon));
-    if (guessDragon == userDragon) {
-      solutionList.add("A tie!");
-    } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.WATER) {
-      
-    }
-    // TODO: Create solution
+    solutionList.add(getComparisonResult(guessDragon, userDragon));
     return String.join("\n", solutionList);
   }
   
