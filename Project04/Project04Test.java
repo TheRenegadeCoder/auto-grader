@@ -20,6 +20,12 @@ public class Project04Test {
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
   
+  public enum Dragon {
+    FIRE,
+      WATER,
+      PLANT
+  }
+  
   /**
    * Sets input and output streams to local print streams for analysis.
    */
@@ -139,15 +145,32 @@ public class Project04Test {
   }
   
   /**
+   * Parse the user solution for their dragon.
+   */
+  private String getGeneratedDragon(String userSolution) {
+    String lowercase = userSolution.toLowerCase();
+    int index = lowercase.lastIndexOf("dragon");
+    String dragonType = lowercase.substring(index - 6, index);
+    return dragonType.trim();
+  }
+  
+  /**
    * Generates the solution for testing.
    * 
-   * @param guessDragon the guess dragon string
-   * @param userDragon the generated dragon string
+   * @param guessDragon the lowercase guess dragon type string
+   * @param userDragon the lowercase generated dragon type string
    * @return the expected solution string 
    */
-  private String buildSolution(String guessDragon, String userDragon) {
-    MathData[] equations = generateAllMathData(first, second);
+  private String buildSolution(Dragon guessDragon, Dragon userDragon) {
     ArrayList<String> solutionList = new ArrayList<String>();
+    solutionList.add("Please select one of your dragons [Fire/Plant/Water]:");
+    solutionList.add(String.format("You chose: %s dragon", guessDragon));
+    solutionList.add(String.format("I chose: %s dragon", userDragon));
+    if (guessDragon == userDragon) {
+      solutionList.add("A tie!");
+    } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.WATER) {
+      
+    }
     // TODO: Create solution
     return String.join("\n", solutionList);
   }
@@ -162,7 +185,6 @@ public class Project04Test {
     //InputStream inContent = new ByteArrayInputStream(input.getBytes());
     //System.setIn(inContent);
     runMain(getTestClasses(4));
-    int[] firstAndSecond = getIntegers(outContent.toString());
     //String solution = buildSolution(name, firstAndSecond[0], firstAndSecond[1], guess);
     //assertEquals(reduceString(solution), reduceString(outContent.toString()));
   }
