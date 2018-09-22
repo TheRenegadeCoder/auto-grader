@@ -159,14 +159,30 @@ public class Project04Test {
     return Dragon.valueOf(dragonType.trim().toUpperCase());
   }
   
+  /**
+   * Handles the rock paper scissors and returns the result.
+   */
   private String getComparisonResult(Dragon guessDragon, Dragon userDragon) {
     String result = "";
+    String defeatsString = "%s defeats %s - %s";
+    String winString = "you win!";
+    String loseString = "you lose!";
     if (guessDragon == Dragon.NONE) {
       result = "You lose by default!";
     } else if (guessDragon == userDragon) {
       result = "A tie!";
     } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.WATER) {
-      
+      result = String.format(defeatsString, Dragon.WATER, Dragon.FIRE, loseString);
+    } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.PLANT) {
+      result = String.format(defeatsString, Dragon.FIRE, Dragon.PLANT, winString);
+    } else if (guessDragon == Dragon.WATER && userDragon == Dragon.PLANT) {
+      result = String.format(defeatsString, Dragon.WATER, Dragon.PLANT, loseString);
+    } else if (guessDragon == Dragon.WATER && userDragon == Dragon.FIRE) {
+      result = String.format(defeatsString, Dragon.WATER, Dragon.FIRE, winString);
+    } else if (guessDragon == Dragon.PLANT && userDragon == Dragon.FIRE) {
+      result = String.format(defeatsString, Dragon.PLANT, Dragon.FIRE, loseString);
+    } else {
+      result = String.format(defeatsString, Dragon.PLANT, Dragon.WATER, winString);
     }
     return result;
   }
@@ -192,13 +208,13 @@ public class Project04Test {
    * 
    * @param dragon the dragon under test
    */
-  private void runCase(String dragon) {
-    //String input = buildLines(name, guessString, guessString, guessString, guessString);
-    //InputStream inContent = new ByteArrayInputStream(input.getBytes());
-    //System.setIn(inContent);
+  private void runCase(String dragonType) {
+    String input = buildLines(dragonType);
+    InputStream inContent = new ByteArrayInputStream(input.getBytes());
+    System.setIn(inContent);
     runMain(getTestClasses(4));
-    //String solution = buildSolution(name, firstAndSecond[0], firstAndSecond[1], guess);
-    //assertEquals(reduceString(solution), reduceString(outContent.toString()));
+    String solution = buildSolution(getDragonType(dragonType), getGeneratedDragonType(inContent.toString()));
+    assertEquals(reduceString(solution), reduceString(outContent.toString()));
   }
   
   /**
