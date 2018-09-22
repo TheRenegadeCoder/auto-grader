@@ -197,6 +197,11 @@ public class Project04Test {
     return result;
   }
   
+  private int numOfSolutions(String output) {
+    int count = output.length() - output.replace("!", "").length();
+    return count;
+  }
+  
   /**
    * Generates the solution for testing.
    * 
@@ -224,12 +229,22 @@ public class Project04Test {
    * @param dragon the dragon under test
    */
   private void runCase(String dragonType) {
-    String input = buildLines(dragonType);
+    // Create multiple records just to test the extra credit
+    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     runMain(getTestClasses(4));
-    String solution = buildSolution(dragonType, getGeneratedDragonType(outContent.toString()));
-    assertEquals(reduceString(solution), reduceString(outContent.toString()));
+    String solutionOutput = outContent.toString();
+    String[] solutionLines = solutionOutput.split(System.lineSeparator());
+    int numOfSolutions = numOfSolutions(solutionOutput);
+    int step = solutionOutput.split(System.lineSeparator()).length / numOfSolutions;
+    String solution = "";
+    for (int i = 0; i < numOfSolutions; i++) {
+      String[] lines = Arrays.copyOfRange(solutionLines, i * step, i * step + step + 1);
+      String section = Arrays.toString(lines);
+      solution += buildSolution(dragonType, getGeneratedDragonType(section));
+    }
+    assertEquals(reduceString(solution), reduceString(solutionOutput));
   }
   
   /**
