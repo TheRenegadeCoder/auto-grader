@@ -39,125 +39,12 @@ public class Project04Test {
   }
   
   /**
-   * An inner class used for storing math data.
-   */
-  private static class MathData {
-    private int result;
-    private String equation;
-    
-    /**
-     * The MathData constructor.
-     */
-    public MathData(int result, String equation) {
-      this.result = result;
-      this.equation = equation;
-    }
-    
-    /**
-     * Gets the result of the equation.
-     * 
-     * @return the result of the equation as an integer
-     */
-    public int getResult() {
-      return this.result;
-    }
-    
-    /**
-     * Gets the equation.
-     * 
-     * @return the equation as a string
-     */
-    public String getEquation() {
-      return this.equation;
-    }
-  }
-  
-  /**
-   * Generates 4 MathData objects.
-   * 
-   * @param first the first value of an equation
-   * @param second the second value of an equation
-   * @return an array of 4 MathData objects
-   */
-  private static MathData[] generateAllMathData(int first, int second) {
-    MathData addition = generateMathData(first, second, '+');
-    MathData multiplication = generateMathData(first, second, '*');    
-    MathData division = generateMathData(first, second, '/');    
-    MathData remainder = generateMathData(first, second, '%');
-    return new MathData[] {addition, multiplication, division, remainder};
-  }
-  
-  /**
-   * Returns a MathData object.
-   * 
-   * @param firstVal some integer value
-   * @param secondVal some integer value
-   * @param operator some binary arithmetic operator (+, -, *, /, %)
-   * @return a String in the form "firstVal operator secondVal = result"
-   */
-  private static MathData generateMathData(int firstVal, int secondVal, char operator) {
-    int result = 0;
-    
-    switch (operator) {
-      case '+':
-        result = firstVal + secondVal;
-        break;
-      case '-':
-        result = firstVal - secondVal;
-        break;
-      case '*':
-        result = firstVal * secondVal;
-        break;
-      case '/':
-        result = firstVal / secondVal;
-        break;
-      case '%':
-        result = firstVal % secondVal;
-        break;
-      default: throw new ArithmeticException();
-    }
-    
-    String equation = firstVal + " " + operator + " " + secondVal + " = " + System.lineSeparator();
-    
-    return new MathData(result, equation);
-  }
-  
-  /**
-   * Generates the solution for testing.
-   * 
-   * @param name the user's name
-   * @param first the first number in each equation
-   * @param second the second number in each equation
-   * @return the expected solution string 
-   */
-  public String buildSolution(String name, int first, int second, int guess) {
-    MathData[] equations = generateAllMathData(first, second);
-    ArrayList<String> solutionList = new ArrayList<String>();
-    solutionList.add("Enter your name: ");
-    solutionList.add("Welcome " + name + "! Please answer the following questions:");
-    int correct = 0;
-    for (MathData equation : equations) {
-      solutionList.add(equation.getEquation());
-      if (equation.getResult() == guess) {
-        solutionList.add("Correct!");
-        correct++;
-      } else {
-        solutionList.add("Wrong!");
-        solutionList.add("The correct answer is " + equation.getResult());
-      }
-    }
-    solutionList.add("You got " + correct + " correct answers");
-    solutionList.add("That's " + ((double) correct) / equations.length * 100 + "%!");
-    return String.join("\n", solutionList);
-  }
-  
-  /**
    * Takes a set of inputs and joins them with newlines.
    * 
    * @param inputs an variable length collection of strings
    * @return the input collection as a string separated by newlines
    */
-  public String buildLines(String ... inputs) {
+  private String buildLines(String ... inputs) {
     StringBuilder sb = new StringBuilder();
     for (String input: inputs) {
       sb.append(input);
@@ -218,7 +105,7 @@ public class Project04Test {
    * 
    * @return an ArrayList of strings to test
    */
-  public ArrayList<String> getTestClasses(int project) {
+  private ArrayList<String> getTestClasses(int project) {
     ArrayList<String> toTest = new ArrayList<String>();
     toTest.add("osu.cse1223.Project%1$s");
     toTest.add("osu.cse1223.Project%1$sa");
@@ -247,23 +134,22 @@ public class Project04Test {
    * @param input an input string
    * @return an input string stripped of all spaces and newlines
    */
-  public String reduceString(String input) {
+  private String reduceString(String input) {
     return input.replace("\n", "").replaceAll("\\s+", "");
   }
   
   /**
-   * Parses the users solution for a pair of numbers
-   * surrounding the addition equation. 
+   * Generates the solution for testing.
    * 
-   * @param output the users solution
-   * @return an array containing the first and second number from parsing
+   * @param guessDragon the guess dragon string
+   * @param userDragon the generated dragon string
+   * @return the expected solution string 
    */
-  private int[] getIntegers(String output) {
-    String digits = output.replaceAll("[^-?0-9]+", " "); 
-    String[] integers = digits.trim().split(" ");
-    int first = Integer.parseInt(integers[0]);
-    int second = Integer.parseInt(integers[1]);
-    return new int[] {first, second};
+  private String buildSolution(String guessDragon, String userDragon) {
+    MathData[] equations = generateAllMathData(first, second);
+    ArrayList<String> solutionList = new ArrayList<String>();
+    // TODO: Create solution
+    return String.join("\n", solutionList);
   }
   
   /**
@@ -271,7 +157,7 @@ public class Project04Test {
    * 
    * @param dragon the dragon under test
    */
-  public void runCase(String dragon) {
+  private void runCase(String dragon) {
     //String input = buildLines(name, guessString, guessString, guessString, guessString);
     //InputStream inContent = new ByteArrayInputStream(input.getBytes());
     //System.setIn(inContent);
