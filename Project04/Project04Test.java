@@ -198,7 +198,7 @@ public class Project04Test {
   }
   
   private int numOfSolutions(String output) {
-    int count = output.length() - output.replace("!", "").length();
+    int count = output.length() - output.replace("[", "").length();
     return count;
   }
   
@@ -230,19 +230,20 @@ public class Project04Test {
    */
   private void runCase(String dragonType) {
     // Create multiple records just to test the extra credit
-    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
+    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     runMain(getTestClasses(4));
     String solutionOutput = outContent.toString();
-    String[] solutionLines = solutionOutput.split(System.lineSeparator());
+    String[] solutionLines = solutionOutput.split("!");
     int numOfSolutions = numOfSolutions(solutionOutput);
+    if (numOfSolutions > 1) {
+      solutionOutput = solutionOutput.replace(solutionOutput.substring(solutionOutput.toLowerCase().lastIndexOf("out"), solutionOutput.length()), "");
+    }
     int step = solutionOutput.split(System.lineSeparator()).length / numOfSolutions;
     String solution = "";
     for (int i = 0; i < numOfSolutions; i++) {
-      String[] lines = Arrays.copyOfRange(solutionLines, i * step, i * step + step + 1);
-      String section = Arrays.toString(lines);
-      solution += buildSolution(dragonType, getGeneratedDragonType(section));
+      solution += buildSolution(dragonType, getGeneratedDragonType(solutionLines[i]));
     }
     assertEquals(reduceString(solution), reduceString(solutionOutput));
   }
