@@ -118,6 +118,8 @@ public class Project04Test {
     toTest.add("cse1223.Project%1$s");    
     toTest.add("project%1$s.Project%1$s");
     toTest.add("Project%1$s");
+    toTest.add("osu.cse1223.DragonsGame");
+    toTest.add("Project04.DragonTrainers");
     String projectNumberWhole = Integer.toString(project);
     String projectNumberPad = "0" + projectNumberWhole;
     int originalSize = toTest.size();
@@ -147,8 +149,9 @@ public class Project04Test {
    */
   private String getGeneratedDragonType(String userSolution) {
     String lowercase = userSolution.toLowerCase();
-    int index = lowercase.lastIndexOf("dragon");
-    String dragonType = lowercase.substring(index - 6, index);
+    int start = lowercase.lastIndexOf("chose:");
+    int end = lowercase.indexOf(" ", start + 7);
+    String dragonType = lowercase.substring(start + 6, end);
     return dragonType;
   }
   
@@ -230,7 +233,7 @@ public class Project04Test {
    */
   private void runCase(String dragonType) {
     // Create multiple records just to test the extra credit
-    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
+    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     runMain(getTestClasses(4));
