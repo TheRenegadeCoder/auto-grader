@@ -7,23 +7,26 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /**
- * Tests project 3 as specified by:
- * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project03.html
- * 
- * This test file verifies that the Project 3 solution passes on the basis of
+ * Tests project 4 as specified by:
+ * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project04.html
+ *
+ * This test file verifies that the Project 4 solution passes on the basis of
  * content rather than structure. In other words, we don't care if the output
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
  */
 public class Project04Test {
-  
+
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-  
+
+  /**
+   * A Dragon Type Enum.
+   */
   public enum Dragon {
     FIRE, WATER, PLANT, NONE;
   }
-  
+
   /**
    * Sets input and output streams to local print streams for analysis.
    */
@@ -32,7 +35,7 @@ public class Project04Test {
     System.setOut(new PrintStream(outContent));
     System.setErr(new PrintStream(errContent));
   }
-  
+
   /**
    * Sets input and output streams back to normal.
    */
@@ -41,10 +44,10 @@ public class Project04Test {
     System.setIn(System.in);
     System.setOut(System.out);
   }
-  
+
   /**
    * Takes a set of inputs and joins them with newlines.
-   * 
+   *
    * @param inputs an variable length collection of strings
    * @return the input collection as a string separated by newlines
    */
@@ -56,10 +59,10 @@ public class Project04Test {
     }
     return sb.toString();
   }
-  
+
   /**
    * A recursive method which returns the main method from the proper class.
-   * 
+   *
    * @param toTest an ArrayList of strings to test
    * @return the class object
    */
@@ -79,10 +82,10 @@ public class Project04Test {
     }
     return cls;
   }
-  
+
   /**
    * Runs the main method of the test class.
-   * 
+   *
    * @param toTest an array of strings to test
    */
   private static void runMain(ArrayList<String> toTest) {
@@ -102,11 +105,12 @@ public class Project04Test {
       System.exit(1);
     }
   }
-  
+
   /**
    * Generates a list of test classes.
    * Add test cases to this list as you find them.
-   * 
+   *
+   * @param project the current project number
    * @return an ArrayList of strings to test
    */
   private ArrayList<String> getTestClasses(int project) {
@@ -115,7 +119,7 @@ public class Project04Test {
     toTest.add("osu.cse1223.Project%1$sa");
     toTest.add("osu.cse1223.CSEProject%1$s");
     toTest.add("cse1223.Project%1$sa");
-    toTest.add("cse1223.Project%1$s");    
+    toTest.add("cse1223.Project%1$s");
     toTest.add("project%1$s.Project%1$s");
     toTest.add("Project%1$s");
     toTest.add("osu.cse1223.DragonsGame");
@@ -132,18 +136,18 @@ public class Project04Test {
     }
     return toTest;
   }
-  
+
   /**
    * Removes all newlines and spaces, so strings can be
    * compared on a content basis.
-   * 
+   *
    * @param input an input string
    * @return an input string stripped of all spaces and newlines
    */
   private String reduceString(String input) {
     return input.replace("\n", "").replaceAll("\\s+", "").toLowerCase();
   }
-  
+
   /**
    * Parse the user solution for their dragon.
    */
@@ -154,9 +158,12 @@ public class Project04Test {
     String dragonType = lowercase.substring(start + 6, end);
     return dragonType;
   }
-  
+
   /**
    * A helper method which converts a dragon string to an enum
+   *
+   * @param dragonType the type of the dragon as a string
+   * @return the dragon type as an enum
    */
   private Dragon getDragonType(String dragonType) {
     String uppercaseDragonType = dragonType.toUpperCase();
@@ -165,15 +172,19 @@ public class Project04Test {
     } else if (uppercaseDragonType.equals("P")) {
       dragonType = "plant";
     } else if (uppercaseDragonType.equals("W")) {
-      dragonType = "water"; 
+      dragonType = "water";
     } else if (dragonType.length() == 1) {
       dragonType = "none";
     }
     return Dragon.valueOf(dragonType.trim().toUpperCase());
   }
-  
+
   /**
    * Handles the rock paper scissors and returns the result.
+   *
+   * @param guessDragon our guess dragon as an enum
+   * @param userDragon the generated dragon as an enum
+   * @return the result of the dragon game as a string
    */
   private String getComparisonResult(Dragon guessDragon, Dragon userDragon) {
     String result = "";
@@ -199,18 +210,24 @@ public class Project04Test {
     }
     return result;
   }
-  
+
+  /**
+   * Gets the number of solutions.
+   *
+   * @param output the user string
+   * @return the number of solutions
+   */
   private int numOfSolutions(String output) {
     int count = output.length() - output.replace("[", "").length();
     return count;
   }
-  
+
   /**
    * Generates the solution for testing.
-   * 
+   *
    * @param guessDragon the lowercase guess dragon type string
    * @param userDragon the lowercase generated dragon type string
-   * @return the expected solution string 
+   * @return the expected solution string
    */
   private String buildSolution(String guessDragon, String userDragon) {
     Dragon guessDragonType = getDragonType(guessDragon);
@@ -225,15 +242,15 @@ public class Project04Test {
     solutionList.add(getComparisonResult(guessDragonType, getDragonType(userDragon)));
     return String.join("\n", solutionList);
   }
-  
+
   /**
    * A helper method which allows us to rapidly build test cases.
-   * 
-   * @param dragon the dragon under test
+   *
+   * @param dragonType the dragon under test
    */
   private void runCase(String dragonType) {
     // Create multiple records just to test the extra credit
-    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
+    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     runMain(getTestClasses(4));
@@ -250,7 +267,7 @@ public class Project04Test {
     }
     assertEquals(reduceString(solution), reduceString(solutionOutput));
   }
-  
+
   /**
    * Tests the Fire dragon case.
    */
@@ -258,7 +275,7 @@ public class Project04Test {
   public void testFire() {
     runCase("Fire");
   }
-  
+
   /**
    * Tests the abreviated Fire dragon case.
    */
@@ -266,7 +283,7 @@ public class Project04Test {
   public void testAbbreviatedFire() {
     runCase("F");
   }
-  
+
   /**
    * Tests the lowercase Fire dragon case.
    */
@@ -274,7 +291,7 @@ public class Project04Test {
   public void testLowercaseFire() {
     runCase("fire");
   }
-  
+
   /**
    * Tests the lowercase abbreviated Fire dragon case.
    */
@@ -282,7 +299,7 @@ public class Project04Test {
   public void testLowercaseAbbreviatedFire() {
     runCase("f");
   }
-  
+
   /**
    * Tests the all caps Fire dragon case.
    */
@@ -290,7 +307,7 @@ public class Project04Test {
   public void testAllCapsFire() {
     runCase("FIRE");
   }
-  
+
   /**
    * Tests the Water dragon case.
    */
@@ -298,7 +315,7 @@ public class Project04Test {
   public void testWater() {
     runCase("Water");
   }
-  
+
   /**
    * Tests the abbreviated Water dragon case.
    */
@@ -306,7 +323,7 @@ public class Project04Test {
   public void testAbbreviatedWater() {
     runCase("W");
   }
-  
+
   /**
    * Tests the lowercase Water dragon case.
    */
@@ -314,7 +331,7 @@ public class Project04Test {
   public void testLowercaseWater() {
     runCase("water");
   }
-  
+
   /**
    * Tests the lowercase abbreviated Water dragon case.
    */
@@ -322,7 +339,7 @@ public class Project04Test {
   public void testLowercaseAbbreviatedWater() {
     runCase("w");
   }
-  
+
   /**
    * Tests the All Caps Water dragon case.
    */
@@ -330,7 +347,7 @@ public class Project04Test {
   public void testAllCapsWater() {
     runCase("WATER");
   }
-  
+
   /**
    * Tests the Plant dragon case.
    */
@@ -338,7 +355,7 @@ public class Project04Test {
   public void testPlant() {
     runCase("Plant");
   }
-  
+
   /**
    * Tests the abbreviated Plant dragon case.
    */
@@ -346,7 +363,7 @@ public class Project04Test {
   public void testAbbreviatedPlant() {
     runCase("P");
   }
-  
+
   /**
    * Tests the lowercase Plant dragon case.
    */
@@ -354,7 +371,7 @@ public class Project04Test {
   public void testLowercasePlant() {
     runCase("plant");
   }
-  
+
   /**
    * Tests the lowercase abbreviated Plant dragon case.
    */
@@ -362,7 +379,7 @@ public class Project04Test {
   public void testLowercaseAbbreviatedPlant() {
     runCase("p");
   }
-  
+
   /**
    * Tests the All Caps Plant dragon case.
    */
@@ -370,7 +387,7 @@ public class Project04Test {
   public void testAllCapsPlant() {
     runCase("PLANT");
   }
-  
+
   /**
    * Tests the none dragon case.
    */
