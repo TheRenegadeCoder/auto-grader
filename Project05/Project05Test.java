@@ -147,155 +147,70 @@ public class Project05Test {
   /**
    * Generates the solution for testing.
    */
-  private String buildSolution() {
+  private String buildSolution(String output) {
+    int correctGuess = getCorrectGuess(output);
     ArrayList<String> solutionList = new ArrayList<String>();
+    for (int i = 1; i < correctGuess; i++) {
+      solutionList.add("Enter a guess between 1 and 200:");
+      solutionList.add("Your guess was too low. Try again.");
+    }
+    solutionList.add("Enter a guess between 1 and 200:");
+    solutionList.add("Congratulations!  Your guess was correct!");
+    solutionList.add("I had chosen " + correctGuess + "as the target number.");
+    solutionList.add("You guessed it in " + correctGuess + " tries.");
+    solutionList.add(getSuccessLine(correctGuess));
     return String.join("\n", solutionList);
   }
-
+  
+  private String getSuccessLine(int guessCount) {
+    if (guessCount == 1) {
+      return "That was astounding!";
+    } else if (guessCount >= 2 && guessCount <= 4) {
+      return "That was lucky!";
+    } else if (guessCount >= 5 && guessCount <= 6) {
+      return "That was pretty good.";
+    } else if (guessCount == 7) {
+      return "That was not that impressive.";
+    } else if (guessCount >= 8 && guessCount <= 9) {
+      return "Are you sure this is the right game for you?";
+    } else {
+      return "This just isn't your game, is it?";
+    }
+  }
+  
+  private int getCorrectGuess(String output) {
+    String digitsOnly = output.replaceAll("[^-?0-9]+", " "); 
+    String[] digitsList = digitsOnly.trim().split(" ");
+    int target = Integer.parseInt(digitsList[digitsList.length - 2]);
+    return target;
+  }
+  
   /**
    * A helper method which allows us to rapidly build test cases.
    *
    * @param dragonType the dragon under test
    */
-  private void runCase(String dragonType) {
+  private void runCase() {
     // Feed some input to scanner
-    String[] numbers = IntStream.rangeClosed(1, 100).mapToObj(String::valueOf).toArray(String[]::new);
-    String input = buildLines();
+    String[] numbers = IntStream.rangeClosed(1, 200).mapToObj(String::valueOf).toArray(String[]::new);
+    String input = buildLines(numbers);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
+    
+    // Run student solution
     runMain(getTestClasses(5));
     
     // Test expected output to output
     String output = outContent.toString();
-    String expectedOutput = buildSolution();
+    String expectedOutput = buildSolution(output);
     assertEquals(reduceString(expectedOutput), reduceString(output));
   }
 
   /**
-   * Tests the Fire dragon case.
+   * Tests the basics.
    */
   @Test
-  public void testFire() {
-    runCase("Fire");
-  }
-
-  /**
-   * Tests the abreviated Fire dragon case.
-   */
-  @Test
-  public void testAbbreviatedFire() {
-    runCase("F");
-  }
-
-  /**
-   * Tests the lowercase Fire dragon case.
-   */
-  @Test
-  public void testLowercaseFire() {
-    runCase("fire");
-  }
-
-  /**
-   * Tests the lowercase abbreviated Fire dragon case.
-   */
-  @Test
-  public void testLowercaseAbbreviatedFire() {
-    runCase("f");
-  }
-
-  /**
-   * Tests the all caps Fire dragon case.
-   */
-  @Test
-  public void testAllCapsFire() {
-    runCase("FIRE");
-  }
-
-  /**
-   * Tests the Water dragon case.
-   */
-  @Test
-  public void testWater() {
-    runCase("Water");
-  }
-
-  /**
-   * Tests the abbreviated Water dragon case.
-   */
-  @Test
-  public void testAbbreviatedWater() {
-    runCase("W");
-  }
-
-  /**
-   * Tests the lowercase Water dragon case.
-   */
-  @Test
-  public void testLowercaseWater() {
-    runCase("water");
-  }
-
-  /**
-   * Tests the lowercase abbreviated Water dragon case.
-   */
-  @Test
-  public void testLowercaseAbbreviatedWater() {
-    runCase("w");
-  }
-
-  /**
-   * Tests the All Caps Water dragon case.
-   */
-  @Test
-  public void testAllCapsWater() {
-    runCase("WATER");
-  }
-
-  /**
-   * Tests the Plant dragon case.
-   */
-  @Test
-  public void testPlant() {
-    runCase("Plant");
-  }
-
-  /**
-   * Tests the abbreviated Plant dragon case.
-   */
-  @Test
-  public void testAbbreviatedPlant() {
-    runCase("P");
-  }
-
-  /**
-   * Tests the lowercase Plant dragon case.
-   */
-  @Test
-  public void testLowercasePlant() {
-    runCase("plant");
-  }
-
-  /**
-   * Tests the lowercase abbreviated Plant dragon case.
-   */
-  @Test
-  public void testLowercaseAbbreviatedPlant() {
-    runCase("p");
-  }
-
-  /**
-   * Tests the All Caps Plant dragon case.
-   */
-  @Test
-  public void testAllCapsPlant() {
-    runCase("PLANT");
-  }
-
-  /**
-   * Tests the none dragon case.
-   */
-  @Test
-  public void testNone() {
-    runCase("q");
+  public void test() {
+    runCase();
   }
 }
