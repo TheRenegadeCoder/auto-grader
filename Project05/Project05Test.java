@@ -119,6 +119,7 @@ public class Project05Test {
     toTest.add("osu.cse1223.DragonsGame");
     toTest.add("Project04.DragonTrainers");
     toTest.add("Main");
+    toTest.add("osu.cse1223.GuessingGame");
     String projectNumberWhole = Integer.toString(project);
     String projectNumberPad = "0" + projectNumberWhole;
     int originalSize = toTest.size();
@@ -154,6 +155,8 @@ public class Project05Test {
   private String buildSolution(String output) {
     int correctGuess = getCorrectGuess(output);
     ArrayList<String> solutionList = new ArrayList<String>();
+    solutionList.add("Enter a guess between 1 and 200:");
+    solutionList.add("Your guess is out of range.  Pick a number between 1 and 200.");
     for (int i = 1; i < correctGuess; i++) {
       solutionList.add("Enter a guess between 1 and 200:");
       solutionList.add("Your guess was too low. Try again.");
@@ -208,7 +211,7 @@ public class Project05Test {
    */
   private void runCase() {
     // Feed some input to scanner
-    String[] numbers = IntStream.rangeClosed(1, 200).mapToObj(String::valueOf).toArray(String[]::new);
+    String[] numbers = IntStream.rangeClosed(0, 200).mapToObj(String::valueOf).toArray(String[]::new);
     String input = buildLines(numbers);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
