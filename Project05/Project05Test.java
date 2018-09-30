@@ -5,12 +5,13 @@ import org.junit.Test;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
- * Tests project 4 as specified by:
- * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project04.html
+ * Tests project 5 as specified by:
+ * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project05.html
  *
- * This test file verifies that the Project 4 solution passes on the basis of
+ * This test file verifies that the Project 5 solution passes on the basis of
  * content rather than structure. In other words, we don't care if the output
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
@@ -19,13 +20,6 @@ public class Project05Test {
 
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-
-  /**
-   * A Dragon Type Enum.
-   */
-  public enum Dragon {
-    FIRE, WATER, PLANT, NONE;
-  }
 
   /**
    * Sets input and output streams to local print streams for analysis.
@@ -148,98 +142,13 @@ public class Project05Test {
     return input.replace("\n", "").replaceAll("\\s+", "").toLowerCase();
   }
 
-  /**
-   * Parse the user solution for their dragon.
-   */
-  private String getGeneratedDragonType(String userSolution) {
-    String lowercase = userSolution.toLowerCase();
-    int start = lowercase.lastIndexOf("chose:");
-    int end = lowercase.indexOf(" ", start + 7);
-    String dragonType = lowercase.substring(start + 6, end);
-    return dragonType;
-  }
-
-  /**
-   * A helper method which converts a dragon string to an enum
-   *
-   * @param dragonType the type of the dragon as a string
-   * @return the dragon type as an enum
-   */
-  private Dragon getDragonType(String dragonType) {
-    String uppercaseDragonType = dragonType.toUpperCase();
-    if (uppercaseDragonType.equals("F")) {
-      dragonType = "fire";
-    } else if (uppercaseDragonType.equals("P")) {
-      dragonType = "plant";
-    } else if (uppercaseDragonType.equals("W")) {
-      dragonType = "water";
-    } else if (dragonType.length() == 1) {
-      dragonType = "none";
-    }
-    return Dragon.valueOf(dragonType.trim().toUpperCase());
-  }
-
-  /**
-   * Handles the rock paper scissors and returns the result.
-   *
-   * @param guessDragon our guess dragon as an enum
-   * @param userDragon the generated dragon as an enum
-   * @return the result of the dragon game as a string
-   */
-  private String getComparisonResult(Dragon guessDragon, Dragon userDragon) {
-    String result = "";
-    String defeatsString = "%s defeats %s - %s";
-    String winString = "you win!";
-    String loseString = "you lose!";
-    if (guessDragon == Dragon.NONE) {
-      result = "You lose by default!";
-    } else if (guessDragon == userDragon) {
-      result = "A tie!";
-    } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.WATER) {
-      result = String.format(defeatsString, Dragon.WATER, Dragon.FIRE, loseString);
-    } else if (guessDragon == Dragon.FIRE && userDragon == Dragon.PLANT) {
-      result = String.format(defeatsString, Dragon.FIRE, Dragon.PLANT, winString);
-    } else if (guessDragon == Dragon.WATER && userDragon == Dragon.PLANT) {
-      result = String.format(defeatsString, Dragon.PLANT, Dragon.WATER, loseString);
-    } else if (guessDragon == Dragon.WATER && userDragon == Dragon.FIRE) {
-      result = String.format(defeatsString, Dragon.WATER, Dragon.FIRE, winString);
-    } else if (guessDragon == Dragon.PLANT && userDragon == Dragon.FIRE) {
-      result = String.format(defeatsString, Dragon.FIRE, Dragon.PLANT, loseString);
-    } else {
-      result = String.format(defeatsString, Dragon.PLANT, Dragon.WATER, winString);
-    }
-    return result;
-  }
-
-  /**
-   * Gets the number of solutions.
-   *
-   * @param output the user string
-   * @return the number of solutions
-   */
-  private int numOfSolutions(String output) {
-    int count = output.length() - output.replace("[", "").length();
-    return count;
-  }
+  /////////////////// Implementation //////////////////////////////////
 
   /**
    * Generates the solution for testing.
-   *
-   * @param guessDragon the lowercase guess dragon type string
-   * @param userDragon the lowercase generated dragon type string
-   * @return the expected solution string
    */
-  private String buildSolution(String guessDragon, String userDragon) {
-    Dragon guessDragonType = getDragonType(guessDragon);
+  private String buildSolution() {
     ArrayList<String> solutionList = new ArrayList<String>();
-    solutionList.add("Please select one of your dragons [Fire/Plant/Water]:");
-    if (guessDragonType == Dragon.NONE) {
-      solutionList.add(String.format("You don't have a %s dragon, so you choose no dragons.", guessDragon));
-    } else {
-      solutionList.add(String.format("You chose: %s dragon", guessDragonType));
-    }
-    solutionList.add(String.format("I chose: %s dragon", userDragon));
-    solutionList.add(getComparisonResult(guessDragonType, getDragonType(userDragon)));
     return String.join("\n", solutionList);
   }
 
@@ -249,23 +158,17 @@ public class Project05Test {
    * @param dragonType the dragon under test
    */
   private void runCase(String dragonType) {
-    // Create multiple records just to test the extra credit
-    String input = buildLines(dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType, dragonType);
+    // Feed some input to scanner
+    String[] numbers = IntStream.rangeClosed(1, 100).mapToObj(String::valueOf).toArray(String[]::new);
+    String input = buildLines();
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
-    runMain(getTestClasses(4));
-    String solutionOutput = outContent.toString();
-    String[] solutionLines = solutionOutput.split("!");
-    int numOfSolutions = numOfSolutions(solutionOutput);
-    if (numOfSolutions > 1) {
-      solutionOutput = solutionOutput.replace(solutionOutput.substring(solutionOutput.toLowerCase().lastIndexOf("out"), solutionOutput.length()), "");
-    }
-    int step = solutionOutput.split(System.lineSeparator()).length / numOfSolutions;
-    String solution = "";
-    for (int i = 0; i < numOfSolutions; i++) {
-      solution += buildSolution(dragonType, getGeneratedDragonType(solutionLines[i]));
-    }
-    assertEquals(reduceString(solution), reduceString(solutionOutput));
+    runMain(getTestClasses(5));
+    
+    // Test expected output to output
+    String output = outContent.toString();
+    String expectedOutput = buildSolution();
+    assertEquals(reduceString(expectedOutput), reduceString(output));
   }
 
   /**
