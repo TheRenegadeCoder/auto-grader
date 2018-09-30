@@ -118,6 +118,7 @@ public class Project05Test {
     toTest.add("Project%1$s");
     toTest.add("osu.cse1223.DragonsGame");
     toTest.add("Project04.DragonTrainers");
+    toTest.add("Main");
     String projectNumberWhole = Integer.toString(project);
     String projectNumberPad = "0" + projectNumberWhole;
     int originalSize = toTest.size();
@@ -226,8 +227,6 @@ public class Project05Test {
    */
   @Test
   public void testManyTimes() {
-    for (int i = 0; i < 100; i++) {
       runCase();
-    }
   }
 }
