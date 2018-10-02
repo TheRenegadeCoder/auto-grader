@@ -164,8 +164,8 @@ public class Project05Test {
     solutionList.add("Enter a guess between 1 and 200:");
     solutionList.add("Congratulations!  Your guess was correct!");
     solutionList.add("I had chosen " + correctGuess + "as the target number.");
-    solutionList.add("You guessed it in " + correctGuess + " tries.");
-    solutionList.add(getSuccessLine(correctGuess));
+    solutionList.add("You guessed it in " + (correctGuess + 1) + " tries.");
+    solutionList.add(getSuccessLine(correctGuess + 1));
     return String.join("\n", solutionList);
   }
   
