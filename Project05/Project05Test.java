@@ -198,7 +198,7 @@ public class Project05Test {
    * @return the correct guess
    */
   private int getCorrectGuess(String output) {
-    String digitsOnly = output.replaceAll("[^-?0-9]+", " "); 
+    String digitsOnly = output.replaceAll("[^0-9]+", " "); 
     String[] digitsList = digitsOnly.trim().split(" ");
     int target = Integer.parseInt(digitsList[digitsList.length - 2]);
     return target;
@@ -206,8 +206,6 @@ public class Project05Test {
   
   /**
    * A helper method which allows us to rapidly build test cases.
-   *
-   * @param dragonType the dragon under test
    */
   private void runCase() {
     // Feed some input to scanner
