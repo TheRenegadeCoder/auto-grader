@@ -144,10 +144,16 @@ public class Project06Test {
   
   /////////////////// Implementation //////////////////////////////////
   
+  /**
+   * A helper method for converting characters to integers
+   */
   private int convertCharToInt(char someChar) {
     return ((int) someChar) - 48;
   }
   
+  /**
+   * A helper method for generating the valid string.
+   */
   private String getValidString(int expectedCheckDigit, int actualCheckDigit) {
     boolean verified = expectedCheckDigit == actualCheckDigit;
     if (verified) {
@@ -157,6 +163,9 @@ public class Project06Test {
     }
   }
   
+  /**
+   * A helper method for getting the expected check digit
+   */
   private int getExpectedCheckDigit(String creditCardNumber) {
     int sum = 0;
     for(int i = creditCardNumber.length() - 2; i > -1; i--) {
