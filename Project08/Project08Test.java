@@ -171,18 +171,14 @@ public class Project08Test {
    */
   private String buildSolution(String... creditCardNumbers) {
     ArrayList<String> solutionList = new ArrayList<String>();
-    solutionList.add("You have 100 dollars.");
-    solutionList.add("Enter an amount to bet (0 to quit):");
-    solutionList.add("You have 100 dollars left.");
-    solutionList.add("Goodbye!");
     return String.join("\n", solutionList);
   }
   
   /**
    * A helper method for testing main.
    */
-  private void runMainCase(String... guessesAndBets) {
-    String input = buildLines(guessesAndBets);
+  private void runMainCase() {
+    String input = buildLines();
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     
@@ -193,131 +189,5 @@ public class Project08Test {
     String output = outContent.toString();
     String expectedOutput = buildSolution();
     assertEquals(reduceString(expectedOutput), reduceString(output));
-  }
-  
-  /**
-   * A helper method for testing getRoll.
-   */
-  private int runGetRollCase() {
-    Class<?>[] parameters = null;
-    Object[] args = null;
-    return (Integer) runStaticMethod("getRoll", parameters, args);
-  }
-  
-  /**
-   * A helper method for testing getBet.
-   */
-  private int runGetBetCase(int pool, String... bets) {
-    String input = buildLines(bets);
-    InputStream inContent = new ByteArrayInputStream(input.getBytes());
-    System.setIn(inContent);
-    Class<?>[] parameters = {Scanner.class, int.class};
-    Object[] args = {new Scanner(System.in), pool};
-    return (Integer) runStaticMethod("getBet", parameters, args);
-  }
-  
-  /**
-   * A helper method for testing getHighLow.
-   */
-  private char runGetHighLow(String... selections) {
-    String input = buildLines(selections);
-    InputStream inContent = new ByteArrayInputStream(input.getBytes());
-    System.setIn(inContent);
-    Class<?>[] parameters = {Scanner.class};
-    Object[] args = {new Scanner(System.in)};
-    return (Character) runStaticMethod("getHighLow", parameters, args);
-  }
-  
-  /**
-   * A helper method for testing determineWinnings.
-   */
-  private int runDetermineWinnings(char highLow, int bet, int roll) {
-    Class<?>[] parameters = {char.class, int.class, int.class};
-    Object[] args = {highLow, bet, roll};
-    return (Integer) runStaticMethod("determineWinnings", parameters, args);
-  }
-  
-  @Test
-  public void testGetRoll() {
-    int result = runGetRollCase();
-    assertTrue("getRoll returned a value out of the range: " + result, 1 <= result && result <= 6);
-  }
-  
-  @Test
-  public void testGetBetValid() {
-    int result = runGetBetCase(100, "50");
-    assertEquals(50, result);
-  }
-  
-  @Test
-  public void testGetBetTooBig() {
-    int result = runGetBetCase(50, "100", "75", "40");
-    assertEquals(40, result);
-  }
-  
-  @Test
-  public void testGetBetNegative() {
-    int result = runGetBetCase(50, "-100", "-75", "40");
-    assertEquals(40, result);
-  }
-  
-  @Test
-  public void testHighLowH() {
-    char result = runGetHighLow("H");
-    assertEquals('H', result);
-  }
-  
-  @Test
-  public void testHighLowS() {
-    char result = runGetHighLow("S");
-    assertEquals('S', result);
-  }
-  
-  @Test
-  public void testHighLowL() {
-    char result = runGetHighLow("L");
-    assertEquals('L', result);
-  }
-  
-  @Test
-  public void testHighLowInvalid() {
-    char result = runGetHighLow("G", "L");
-    assertEquals('L', result);
-  }
-  
-  @Test
-  public void testDetermineWinningsHighRight() {
-    int winnings = runDetermineWinnings('H', 100, 10);
-    assertEquals(100, winnings);
-  }
-  
-  @Test
-  public void testDetermineWinningsHighWrong() {
-    int winnings = runDetermineWinnings('H', 100, 3);
-    assertEquals(-100, winnings);
-  }
-  
-  @Test
-  public void testDetermineWinningsLowRight() {
-    int winnings = runDetermineWinnings('L', 100, 2);
-    assertEquals(100, winnings);
-  }
-  
-  @Test
-  public void testDetermineWinningsLowWrong() {
-    int winnings = runDetermineWinnings('L', 100, 10);
-    assertEquals(-100, winnings);
-  }
-  
-  @Test
-  public void testDetermineWinningsSevensRight() {
-    int winnings = runDetermineWinnings('S', 100, 7);
-    assertEquals(400, winnings);
-  }
-  
-  @Test
-  public void testDetermineWinningsSevensWrong() {
-    int winnings = runDetermineWinnings('S', 100, 10);
-    assertEquals(-100, winnings);
   }
 }
