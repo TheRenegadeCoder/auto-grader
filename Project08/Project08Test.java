@@ -9,10 +9,10 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * Tests project 7 as specified by:
- * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project07.html
+ * Tests project 8 as specified by:
+ * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project08.html
  *
- * This test file verifies that the Project 7 solution passes on the basis of
+ * This test file verifies that the Project 8 solution passes on the basis of
  * content rather than structure. In other words, we don't care if the output
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
@@ -20,9 +20,13 @@ import java.util.stream.*;
 public class Project08Test {
   
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-  private static final int PROJECT_NUMBER = 7;
+  private static final int PROJECT_NUMBER = 8;
   private static Class<?> cls = null;
   
+  /**
+   * Gets the class name through trial and error and assigns it
+   * permanently for the duration of testing.
+   */
   @BeforeClass
   public static void setUpOnce() {
     cls = getClass(getTestClasses(PROJECT_NUMBER));
