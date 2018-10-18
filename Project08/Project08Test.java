@@ -211,6 +211,9 @@ public class Project08Test {
     assertEquals(reduceString(expectedOutput), reduceString(output));
   }
   
+  /**
+   * Tests that decimal to binary conversion works.
+   */
   private void runDecimalToBinaryCase(String expectedResult, int value) {
     Class<?>[] parameters = {int.class};
     Object[] args = {value};
@@ -218,6 +221,9 @@ public class Project08Test {
     assertEquals(expectedResult, result);
   }
   
+  /**
+   * Tests the valid check for decimal.
+   */
   private void runCheckForValidDecimalCase(boolean expectedResult, String value) {
     Class<?>[] parameters = {String.class};
     Object[] args = {value};
