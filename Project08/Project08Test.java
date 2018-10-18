@@ -166,11 +166,31 @@ public class Project08Test {
   
   /////////////////// Implementation //////////////////////////////////
   
+  private String getBinary(String decimal) {
+    try {
+      int number = Integer.parseInt(decimal);
+      String binary = "";
+      while (number > 0) {
+        binary = number % 2 + binary;
+        number /= 2;
+      }
+      return String.format("The decimal value %s is %s in binary.", decimal, binary);
+    } catch (Exception e) {
+      return "ERROR - value must be non-negative and contain only digits";
+    }
+  }
+  
   /**
    * Generates the expected output for testing.
    */
-  private String buildSolution(String... creditCardNumbers) {
+  private String buildSolution(String... numbers) {
     ArrayList<String> solutionList = new ArrayList<String>();
+    solutionList.add("Converting from Decimal to Binary");
+    for (String number : numbers) {
+      solutionList.add("Enter an integer value (negative value to quit):");
+      solutionList.add(getBinary(number));
+    }
+    solutionList.add("Goodbye!");
     return String.join("\n", solutionList);
   }
   
@@ -187,7 +207,7 @@ public class Project08Test {
     
     // Test expected output to output
     String output = outContent.toString();
-    String expectedOutput = buildSolution();
+    String expectedOutput = buildSolution(numbers);
     assertEquals(reduceString(expectedOutput), reduceString(output));
   }
   
