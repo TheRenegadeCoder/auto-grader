@@ -177,8 +177,8 @@ public class Project08Test {
   /**
    * A helper method for testing main.
    */
-  private void runMainCase() {
-    String input = buildLines();
+  private void runMainCase(String... numbers) {
+    String input = buildLines(numbers);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     
@@ -191,14 +191,41 @@ public class Project08Test {
     assertEquals(reduceString(expectedOutput), reduceString(output));
   }
   
-  private String runDecimalToBinaryCase(int value) {
+  private void runDecimalToBinaryCase(String expectedResult, int value) {
     Class<?>[] parameters = {int.class};
     Object[] args = {value};
-    return (String) runStaticMethod("decimalToBinary", parameters, args);
+    String result = (String) runStaticMethod("decimalToBinary", parameters, args);
+    assertEquals(expectedResult, result);
+  }
+  
+  private boolean runCheckForValidDecimalCase(String value) {
+    Class<?>[] parameters = {String.class};
+    Object[] args = {value};
+    return (boolean) runStaticMethod("checkForValidDecimal", parameters, args);
   }
   
   @Test
   public void testDecimalToBinaryZero() {
-    assertEquals("0", runDecimalToBinaryCase(0));
+    runDecimalToBinaryCase("0", 0);
+  }
+  
+  @Test
+  public void testDecimalToBinarySeven() {
+    runDecimalToBinaryCase("111", 7);
+  }
+  
+  @Test
+  public void testCheckForValidDecimalTrue() {
+    assertTrue(runCheckForValidDecimalCase("1234"));
+  }
+  
+  @Test
+  public void testCheckForValidDecimalFalse() {
+    assertFalse(runCheckForValidDecimalCase("12B34"));
+  }
+  
+  @Test
+  public void runMainValidTwo() {
+    runMainCase("1234", "-1");
   }
 }
