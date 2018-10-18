@@ -190,4 +190,15 @@ public class Project08Test {
     String expectedOutput = buildSolution();
     assertEquals(reduceString(expectedOutput), reduceString(output));
   }
+  
+  private String runDecimalToBinaryCase(int value) {
+    Class<?>[] parameters = {int.class};
+    Object[] args = {value};
+    return (String) runStaticMethod("decimalToBinary", parameters, args);
+  }
+  
+  @Test
+  public void testDecimalToBinaryZero() {
+    assertEquals("0", runDecimalToBinaryCase(0));
+  }
 }
