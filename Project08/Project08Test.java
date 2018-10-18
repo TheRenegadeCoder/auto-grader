@@ -198,10 +198,11 @@ public class Project08Test {
     assertEquals(expectedResult, result);
   }
   
-  private boolean runCheckForValidDecimalCase(String value) {
+  private void runCheckForValidDecimalCase(boolean expectedResult, String value) {
     Class<?>[] parameters = {String.class};
     Object[] args = {value};
-    return (boolean) runStaticMethod("checkForValidDecimal", parameters, args);
+    boolean result = (boolean) runStaticMethod("checkForValidDecimal", parameters, args);
+    assertEquals(expectedResult, result);
   }
   
   @Test
@@ -216,12 +217,12 @@ public class Project08Test {
   
   @Test
   public void testCheckForValidDecimalTrue() {
-    assertTrue(runCheckForValidDecimalCase("1234"));
+    runCheckForValidDecimalCase(true, "1234");
   }
   
   @Test
   public void testCheckForValidDecimalFalse() {
-    assertFalse(runCheckForValidDecimalCase("12B34"));
+    runCheckForValidDecimalCase(false, "12B34");
   }
   
   @Test
