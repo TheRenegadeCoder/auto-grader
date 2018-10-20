@@ -136,7 +136,8 @@ public class Project08Test {
     toTest.add("cse1223.Project%1$sa");
     toTest.add("cse1223.Project%1$s");
     toTest.add("project%1$s.Project%1$s");
-    toTest.add("Project%1$s");
+    toTest.add("Project%1$s");    
+    toTest.add("Project%1$sA");
     toTest.add("osu.cse1223.DragonsGame");
     toTest.add("Project04.DragonTrainers");
     toTest.add("Main");
@@ -188,7 +189,11 @@ public class Project08Test {
     solutionList.add("Converting from Decimal to Binary");
     for (String number : numbers) {
       solutionList.add("Enter an integer value (negative value to quit):");
-      solutionList.add(getBinary(number));
+      if (Integer.parseInt(number) == -1) {
+        break;
+      } else {
+        solutionList.add(getBinary(number));
+      }
     }
     solutionList.add("Goodbye!");
     return String.join("\n", solutionList);
