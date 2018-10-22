@@ -23,11 +23,11 @@ import java.util.*;
  * care that the solution has all the expected content.
  */
 public class Project09Test {
-
+  
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private static final int PROJECT_NUMBER = 9;
   private static Class<?> cls = null;
-
+  
   /**
    * Gets the class name through trial and error and assigns it
    * permanently for the duration of testing.
@@ -36,7 +36,7 @@ public class Project09Test {
   public static void setUpOnce() {
     cls = getClass(getTestClasses(PROJECT_NUMBER));
   }
-
+  
   /**
    * Sets input and output streams to local print streams for analysis.
    */
@@ -44,7 +44,7 @@ public class Project09Test {
   public void setUp() {
     System.setOut(new PrintStream(outContent));
   }
-
+  
   /**
    * Sets input and output streams back to normal.
    */
@@ -52,7 +52,7 @@ public class Project09Test {
   public void tearDown() {
     System.setOut(System.out);
   }
-
+  
   /**
    * Takes a set of inputs and joins them with newlines.
    *
@@ -67,7 +67,7 @@ public class Project09Test {
     }
     return sb.toString();
   }
-
+  
   /**
    * A recursive method which returns the main method from the proper class.
    *
@@ -91,7 +91,7 @@ public class Project09Test {
     }
     return cls;
   }
-
+  
   /**
    * A generic method for running static methods using reflection.
    */
@@ -114,7 +114,7 @@ public class Project09Test {
     }
     return returnValue;
   }
-
+  
   /**
    * Runs the main method of the test class.
    *
@@ -125,7 +125,7 @@ public class Project09Test {
     Object[] args = {null};
     runStaticMethod("main", parameters, args);
   }
-
+  
   /**
    * Generates a list of test classes.
    * Add test cases to this list as you find them.
@@ -158,7 +158,7 @@ public class Project09Test {
     }
     return toTest;
   }
-
+  
   /**
    * Removes all newlines and spaces, so strings can be
    * compared on a content basis.
@@ -169,25 +169,27 @@ public class Project09Test {
   private String reduceString(String input) {
     return input.replace("\n", "").replaceAll("\\s+", "").toLowerCase();
   }
-
+  
   /////////////////// Implementation //////////////////////////////////
-
+  
   /**
    * Gets the decimal from binary.
    */
   private String getDecimal(String binary) {
     try {
       int decimal = 0;
-      for (int i = binary.length(), pow = 0; i >= 0; i--, pow++) {
+      for (int i = binary.length() - 1, pow = 0; i >= 0; i--, pow++) {
         int digit = Character.getNumericValue(binary.charAt(i));
-        decimal += Math.pow(digit, pow);
+        if (digit == 0) {
+          decimal += Math.pow(2, pow);
+        }
       }
       return String.format("The binary value %s is %d in decimal.", binary, decimal);
     } catch (Exception e) {
       return "ERROR - value must be non-negative and contain only digits";
     }
   }
-
+  
   /**
    * Generates the expected output for testing.
    */
@@ -205,7 +207,7 @@ public class Project09Test {
     solutionList.add("Goodbye!");
     return String.join("\n", solutionList);
   }
-
+  
   /**
    * A helper method for testing main.
    */
@@ -213,16 +215,16 @@ public class Project09Test {
     String input = buildLines(numbers);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
-
+    
     // Run student solution
     runMain(getTestClasses(PROJECT_NUMBER));
-
+    
     // Test expected output to output
     String output = outContent.toString();
     String expectedOutput = buildSolution(numbers);
     assertEquals(reduceString(expectedOutput), reduceString(output));
   }
-
+  
   /**
    * Tests that binary to decimal conversion works.
    */
@@ -232,7 +234,7 @@ public class Project09Test {
     int result = (int) runStaticMethod("binaryToDecimal", parameters, args);
     assertEquals(expectedResult, result);
   }
-
+  
   /**
    * Tests the valid check for binary.
    */
@@ -242,7 +244,7 @@ public class Project09Test {
     boolean result = (boolean) runStaticMethod("checkForBinaryValue", parameters, args);
     assertEquals(expectedResult, result);
   }
-
+  
   /**
    * Tests the prompt for binary method.
    */
@@ -252,37 +254,37 @@ public class Project09Test {
     String result = (String) runStaticMethod("promptForBinary", parameters, args);
     assertEquals(expectedResult, result);
   }
-
+  
   @Test
   public void testBinaryTen() {
     runBinaryToDecimalCase(10, "1010");
   }
-
+  
   @Test
   public void testBinaryZero() {
     runBinaryToDecimalCase(0, "0");
   }
-
+  
   @Test
   public void testBinaryOne() {
     runBinaryToDecimalCase(1, "1");
   }
-
+  
   @Test
   public void testBinaryInvalid() {
     runCheckForBinaryValueCase(false, "1234");
   }
-
+  
   @Test
   public void testBinaryValid() {
     runCheckForBinaryValueCase(true, "1010");
   }
-
+  
   @Test
   public void testPrompt() {
     runPromptForBinaryCase("111", "111");
   }
-
+  
   @Test
   public void testMain() {
     runMainCase("101", "-1");
