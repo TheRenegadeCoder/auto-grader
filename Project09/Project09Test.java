@@ -1,6 +1,5 @@
 import org.junit.Before;
 
-import com.sun.corba.se.spi.orbutil.fsm.TestAction1;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -23,7 +22,7 @@ import java.util.*;
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
  */
-public class Project08Test {
+public class Project09Test {
 
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   private static final int PROJECT_NUMBER = 9;
@@ -179,8 +178,8 @@ public class Project08Test {
   private String getDecimal(String binary) {
     try {
       int decimal = 0;
-      for (int i = binary.length(), int pow = 0; i >= 0; i--, pow++) {
-        int digit = Integer.parseInt(binary.charAt(i));
+      for (int i = binary.length(), pow = 0; i >= 0; i--, pow++) {
+        int digit = Character.getNumericValue(binary.charAt(i));
         decimal += Math.pow(digit, pow);
       }
       return String.format("The binary value %s is %d in decimal.", binary, decimal);
