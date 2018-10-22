@@ -248,7 +248,10 @@ public class Project09Test {
   /**
    * Tests the prompt for binary method.
    */
-  private void runPromptForBinaryCase(String expectedResult, String value) {
+  private void runPromptForBinaryCase(String expectedResult, String... values) {
+    String input = buildLines(values);
+    InputStream inContent = new ByteArrayInputStream(input.getBytes());
+    System.setIn(inContent);
     Class<?>[] parameters = {Scanner.class};
     Object[] args = {new Scanner(System.in)};
     String result = (String) runStaticMethod("promptForBinary", parameters, args);
@@ -281,8 +284,13 @@ public class Project09Test {
   }
   
   @Test
-  public void testPrompt() {
+  public void testPromptSingle() {
     runPromptForBinaryCase("111", "111");
+  }
+  
+  @Test
+  public void testPromptDouble() {
+    runPromptForBinaryCase("111", "1234", "111");
   }
   
   @Test
