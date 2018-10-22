@@ -180,7 +180,7 @@ public class Project09Test {
       int decimal = 0;
       for (int i = binary.length() - 1, pow = 0; i >= 0; i--, pow++) {
         int digit = Character.getNumericValue(binary.charAt(i));
-        if (digit == 0) {
+        if (digit == 1) {
           decimal += Math.pow(2, pow);
         }
       }
@@ -197,8 +197,8 @@ public class Project09Test {
     ArrayList<String> solutionList = new ArrayList<String>();
     solutionList.add("Converting from Binary to Decimal");
     for (String number : numbers) {
-      solutionList.add("Enter an integer value (negative value to quit):");
-      if (Integer.parseInt(number) == -1) {
+      solutionList.add("Enter an integer value (empty line to quit):");
+      if (number.isEmpty()) {
         break;
       } else {
         solutionList.add(getDecimal(number));
@@ -295,6 +295,6 @@ public class Project09Test {
   
   @Test
   public void testMain() {
-    runMainCase("101", "-1");
+    runMainCase("101", "");
   }
 }
