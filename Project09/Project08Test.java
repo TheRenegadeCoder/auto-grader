@@ -1,12 +1,18 @@
-import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.After;
-import org.junit.Test;
+
+import com.sun.corba.se.spi.orbutil.fsm.TestAction1;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.junit.After;
+import java.io.*;
+import java.util.*;
 
 /**
  * Tests project 9 as specified by:
@@ -246,5 +252,40 @@ public class Project08Test {
     Object[] args = {new Scanner(System.in)};
     String result = (String) runStaticMethod("promptForBinary", parameters, args);
     assertEquals(expectedResult, result);
+  }
+
+  @Test
+  public void testBinaryTen() {
+    runBinaryToDecimalCase(10, "1010");
+  }
+
+  @Test
+  public void testBinaryZero() {
+    runBinaryToDecimalCase(0, "0");
+  }
+
+  @Test
+  public void testBinaryOne() {
+    runBinaryToDecimalCase(1, "1");
+  }
+
+  @Test
+  public void testBinaryInvalid() {
+    runCheckForBinaryValueCase(false, "1234");
+  }
+
+  @Test
+  public void testBinaryValid() {
+    runCheckForBinaryValueCase(true, "1010");
+  }
+
+  @Test
+  public void testPrompt() {
+    runPromptForBinaryCase("111", "111");
+  }
+
+  @Test
+  public void testMain() {
+    runMainCase("101", "-1");
   }
 }
