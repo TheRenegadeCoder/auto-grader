@@ -217,7 +217,7 @@ public class Project08Test {
   }
 
   /**
-   * Tests that decimal to binary conversion works.
+   * Tests that binary to decimal conversion works.
    */
   private void runBinaryToDecimalCase(String expectedResult, String value) {
     Class<?>[] parameters = {String.class};
@@ -227,37 +227,22 @@ public class Project08Test {
   }
 
   /**
-   * Tests the valid check for decimal.
+   * Tests the valid check for binary.
    */
-  private void runCheckForValidDecimalCase(boolean expectedResult, String value) {
+  private void runCheckForBinaryValueCase(boolean expectedResult, String value) {
     Class<?>[] parameters = {String.class};
     Object[] args = {value};
-    boolean result = (boolean) runStaticMethod("checkForValidDecimal", parameters, args);
+    boolean result = (boolean) runStaticMethod("checkForBinaryValue", parameters, args);
     assertEquals(expectedResult, result);
   }
 
-  @Test
-  public void testDecimalToBinaryZero() {
-    runDecimalToBinaryCase("0", 0);
-  }
-
-  @Test
-  public void testDecimalToBinarySeven() {
-    runDecimalToBinaryCase("111", 7);
-  }
-
-  @Test
-  public void testCheckForValidDecimalTrue() {
-    runCheckForValidDecimalCase(true, "1234");
-  }
-
-  @Test
-  public void testCheckForValidDecimalFalse() {
-    runCheckForValidDecimalCase(false, "12B34");
-  }
-
-  @Test
-  public void runMainValidTwo() {
-    runMainCase("1234", "-1");
+  /**
+   * Tests the prompt for binary method.
+   */
+  private void runPromptForBinaryCase(String expectedResult, String value) {
+    Class<?>[] parameters = {Scanner.class};
+    Object[] args = {new Scanner(System.in)};
+    String result = (String) runStaticMethod("promptForBinary", parameters, args);
+    assertEquals(expectedResult, result);
   }
 }
