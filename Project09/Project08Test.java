@@ -167,15 +167,14 @@ public class Project08Test {
 
   /////////////////// Implementation //////////////////////////////////
 
-  private String getBinary(String decimal) {
+  private String getDecimal(String binary) {
     try {
-      int number = Integer.parseInt(decimal);
-      String binary = "";
-      while (number > 0) {
-        binary = number % 2 + binary;
-        number /= 2;
+      int decimal = 0;
+      for (int i = binary.length(), int pow = 0; i >= 0; i--, pow++) {
+        int digit = Integer.parseInt(binary.charAt(i));
+        decimal += Math.pow(digit, pow);
       }
-      return String.format("The decimal value %s is %s in binary.", decimal, binary);
+      return String.format("The binary value %s is %d in decimal.", binary, decimal);
     } catch (Exception e) {
       return "ERROR - value must be non-negative and contain only digits";
     }
@@ -219,10 +218,10 @@ public class Project08Test {
   /**
    * Tests that binary to decimal conversion works.
    */
-  private void runBinaryToDecimalCase(String expectedResult, String value) {
+  private void runBinaryToDecimalCase(int expectedResult, String value) {
     Class<?>[] parameters = {String.class};
     Object[] args = {value};
-    String result = (String) runStaticMethod("binaryToDecimal", parameters, args);
+    int result = (int) runStaticMethod("binaryToDecimal", parameters, args);
     assertEquals(expectedResult, result);
   }
 
