@@ -167,6 +167,9 @@ public class Project08Test {
 
   /////////////////// Implementation //////////////////////////////////
 
+  /**
+   * Gets the decimal from binary.
+   */
   private String getDecimal(String binary) {
     try {
       int decimal = 0;
@@ -185,13 +188,13 @@ public class Project08Test {
    */
   private String buildSolution(String... numbers) {
     ArrayList<String> solutionList = new ArrayList<String>();
-    solutionList.add("Converting from Decimal to Binary");
+    solutionList.add("Converting from Binary to Decimal");
     for (String number : numbers) {
       solutionList.add("Enter an integer value (negative value to quit):");
       if (Integer.parseInt(number) == -1) {
         break;
       } else {
-        solutionList.add(getBinary(number));
+        solutionList.add(getDecimal(number));
       }
     }
     solutionList.add("Goodbye!");
