@@ -184,7 +184,7 @@ public class Project09Test {
           decimal += Math.pow(2, pow);
         }
       }
-      return String.format("The binary value %s is %d in decimal.", binary, decimal);
+      return String.format("The binary value %s is %d in decimal (base 10).", binary, decimal);
     } catch (Exception e) {
       return "ERROR - value must be non-negative and contain only digits";
     }
@@ -197,7 +197,7 @@ public class Project09Test {
     ArrayList<String> solutionList = new ArrayList<String>();
     solutionList.add("Converting from Binary to Decimal");
     for (String number : numbers) {
-      solutionList.add("Enter an integer value (empty line to quit):");
+      solutionList.add("Enter a binary value (empty line to quit):");
       if (number.isEmpty()) {
         break;
       } else {
