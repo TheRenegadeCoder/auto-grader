@@ -14,10 +14,10 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Tests project 9 as specified by:
- * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project09.html
+ * Tests project 10 as specified by:
+ * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project10.html
  *
- * This test file verifies that the Project 9 solution passes on the basis of
+ * This test file verifies that the Project 10 solution passes on the basis of
  * content rather than structure. In other words, we don't care if the output
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
@@ -173,38 +173,10 @@ public class Project10Test {
   /////////////////// Implementation //////////////////////////////////
   
   /**
-   * Gets the decimal from binary.
-   */
-  private String getDecimal(String binary) {
-    try {
-      int decimal = 0;
-      for (int i = binary.length() - 1, pow = 0; i >= 0; i--, pow++) {
-        int digit = Character.getNumericValue(binary.charAt(i));
-        if (digit == 1) {
-          decimal += Math.pow(2, pow);
-        }
-      }
-      return String.format("The binary value %s is %d in decimal (base 10).", binary, decimal);
-    } catch (Exception e) {
-      return "ERROR - value must be non-negative and contain only digits";
-    }
-  }
-  
-  /**
    * Generates the expected output for testing.
    */
   private String buildSolution(String... numbers) {
     ArrayList<String> solutionList = new ArrayList<String>();
-    solutionList.add("Converting from Binary to Decimal");
-    for (String number : numbers) {
-      solutionList.add("Enter a binary value (empty line to quit):");
-      if (number.isEmpty()) {
-        break;
-      } else {
-        solutionList.add(getDecimal(number));
-      }
-    }
-    solutionList.add("Goodbye!");
     return String.join("\n", solutionList);
   }
   
@@ -256,45 +228,5 @@ public class Project10Test {
     Object[] args = {new Scanner(System.in)};
     String result = (String) runStaticMethod("promptForBinary", parameters, args);
     assertEquals(expectedResult, result);
-  }
-  
-  @Test
-  public void testBinaryTen() {
-    runBinaryToDecimalCase(10, "1010");
-  }
-  
-  @Test
-  public void testBinaryZero() {
-    runBinaryToDecimalCase(0, "0");
-  }
-  
-  @Test
-  public void testBinaryOne() {
-    runBinaryToDecimalCase(1, "1");
-  }
-  
-  @Test
-  public void testBinaryInvalid() {
-    runCheckForBinaryValueCase(false, "1234");
-  }
-  
-  @Test
-  public void testBinaryValid() {
-    runCheckForBinaryValueCase(true, "1010");
-  }
-  
-  @Test
-  public void testPromptSingle() {
-    runPromptForBinaryCase("111", "111");
-  }
-  
-  @Test
-  public void testPromptDouble() {
-    runPromptForBinaryCase("111", "1234", "111");
-  }
-  
-  @Test
-  public void testMain() {
-    runMainCase("101", "");
   }
 }
