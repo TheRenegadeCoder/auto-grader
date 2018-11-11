@@ -198,35 +198,13 @@ public class Project10Test {
   }
   
   /**
-   * Tests that binary to decimal conversion works.
+   * A helper method for testing the reset dice method.
    */
-  private void runBinaryToDecimalCase(int expectedResult, String value) {
-    Class<?>[] parameters = {String.class};
-    Object[] args = {value};
-    int result = (int) runStaticMethod("binaryToDecimal", parameters, args);
-    assertEquals(expectedResult, result);
+  private void runResetDice(int[] expectedResult, int[] dice) {
+    Class<?>[] parameters = {int[].class};
+    Object[] args = {dice};
+    runStaticMethod("resetDice", parameters, args);
+    assertEquals(expectedResult, dice);
   }
   
-  /**
-   * Tests the valid check for binary.
-   */
-  private void runCheckForBinaryValueCase(boolean expectedResult, String value) {
-    Class<?>[] parameters = {String.class};
-    Object[] args = {value};
-    boolean result = (boolean) runStaticMethod("checkForBinaryValue", parameters, args);
-    assertEquals(expectedResult, result);
-  }
-  
-  /**
-   * Tests the prompt for binary method.
-   */
-  private void runPromptForBinaryCase(String expectedResult, String... values) {
-    String input = buildLines(values);
-    InputStream inContent = new ByteArrayInputStream(input.getBytes());
-    System.setIn(inContent);
-    Class<?>[] parameters = {Scanner.class};
-    Object[] args = {new Scanner(System.in)};
-    String result = (String) runStaticMethod("promptForBinary", parameters, args);
-    assertEquals(expectedResult, result);
-  }
 }
