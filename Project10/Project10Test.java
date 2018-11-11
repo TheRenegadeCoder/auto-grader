@@ -22,10 +22,10 @@ import java.util.*;
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
  */
-public class Project09Test {
+public class Project10Test {
   
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-  private static final int PROJECT_NUMBER = 9;
+  private static final int PROJECT_NUMBER = 10;
   private static Class<?> cls = null;
   
   /**
