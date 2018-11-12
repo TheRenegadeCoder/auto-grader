@@ -286,4 +286,14 @@ public class Project10Test {
   public void testDiceToString() {
     runDiceToString("0 2 7 5 4", new int[]{0, 2, 7, 5, 4});
   }
+  
+  @Test
+  public void testRollDice() {
+    runRollDice(new int[]{1,1,1,1,1}, new int[]{1,1,1,1,1});
+  }
+  
+  @Test
+  public void testPromptForReroll() {
+    runPromptForReroll(new int[]{0,1,0,1,0}, new int[]{2,1,2,1,2}, new String[]{"0","2","4"});
+  }
 }
