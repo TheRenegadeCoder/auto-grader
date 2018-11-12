@@ -85,7 +85,7 @@ public class Project10Test {
           cls = getClass(toTest);
         } else {
           cls = null;
-          System.exit(1);
+          //System.exit(1);
         }
       }
     }
@@ -104,13 +104,13 @@ public class Project10Test {
       returnValue = meth.invoke(null, args);
     } catch (NoSuchMethodException e) {
       System.err.println("No method " + methodName + " for class " + cls.getName());
-      System.exit(1);
+      //System.exit(1);
     } catch (IllegalAccessException e) {
       System.err.println("Can't invoke method " + methodName);
-      System.exit(1);
+      //System.exit(1);
     } catch (InvocationTargetException e) {
       System.err.println("Can't target method " + methodName);
-      System.exit(1);
+      //System.exit(1);
     }
     return returnValue;
   }
@@ -204,7 +204,7 @@ public class Project10Test {
     Class<?>[] parameters = {int[].class};
     Object[] args = {dice};
     runStaticMethod("resetDice", parameters, args);
-    assertEquals(expectedResult, dice);
+    assertArrayEquals(expectedResult, dice);
   }
   
   /**
@@ -213,8 +213,8 @@ public class Project10Test {
   private void runDiceToString(String expectedResult, int[] dice) {
     Class<?>[] parameters = {int[].class};
     Object[] args = {dice};
-    runStaticMethod("diceToString", parameters, args);
-    assertEquals(expectedResult, dice);
+    String result = (String) runStaticMethod("diceToString", parameters, args);
+    assertEquals(expectedResult, result.trim());
   }
   
   /**
@@ -224,34 +224,34 @@ public class Project10Test {
     Class<?>[] parameters = {int[].class};
     Object[] args = {dice};
     runStaticMethod("rollDice", parameters, args);
-    assertEquals(expectedResult, dice);
+    assertArrayEquals(expectedResult, dice);
   }
   
   /**
    * A helper method for testing the prompt for reroll method.
    */
   private void runPromptForReroll(int[] expectedResult, int[] dice, String[] indices) {
-    Class<?>[] parameters = {int[].class, Scanner.class};
-    Object[] args = {dice, new Scanner(System.in)};
-    
     String input = buildLines(indices);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
     
+    Class<?>[] parameters = {int[].class, Scanner.class};
+    Object[] args = {dice, new Scanner(System.in)};
+    
     runStaticMethod("promptForReroll", parameters, args);
-    assertEquals(expectedResult, dice);
+    assertArrayEquals(expectedResult, dice);
   }
   
   /**
    * A helper method for testing the prompt for play again method.
    */
   private void runPromptForPlayAgain(boolean expectedResult, String[] playAgain) {
-    Class<?>[] parameters = {Scanner.class};
-    Object[] args = {new Scanner(System.in)};
-    
     String input = buildLines(playAgain);
     InputStream inContent = new ByteArrayInputStream(input.getBytes());
     System.setIn(inContent);
+    
+    Class<?>[] parameters = {Scanner.class};
+    Object[] args = {new Scanner(System.in)};
     
     boolean result = (boolean) runStaticMethod("promptForPlayAgain", parameters, args);
     assertEquals(expectedResult, result);
@@ -274,7 +274,7 @@ public class Project10Test {
     Class<?>[] parameters = {int[].class};
     Object[] args = {dice};
     int[] result = (int[]) runStaticMethod("getCounts", parameters, args);
-    assertEquals(expectedResult, result);
+    assertArrayEquals(expectedResult, result);
   }
   
   @Test
@@ -294,7 +294,7 @@ public class Project10Test {
   
   @Test
   public void testPromptForReroll() {
-    runPromptForReroll(new int[]{0,1,0,1,0}, new int[]{2,1,2,1,2}, new String[]{"0","2","4"});
+    runPromptForReroll(new int[]{0,1,0,1,0}, new int[]{2,1,2,1,2}, new String[]{"0","2","4", "-1"});
   }
   
   @Test
@@ -364,6 +364,6 @@ public class Project10Test {
   
   @Test
   public void testGetCounts() {
-    runGetCounts(new int []{0, 3, 0, 2, 0, 0, 0, 0, 0, 0}, new int []{1, 3, 1, 3, 1});
+    runGetCounts(new int []{3, 0, 2, 0, 0, 0, 0, 0, 0, 0}, new int []{1, 3, 1, 3, 1});
   }
 }
