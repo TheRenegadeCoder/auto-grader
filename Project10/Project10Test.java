@@ -321,4 +321,14 @@ public class Project10Test {
   public void testPromptForPlayAgainInvalid() {
     runPromptForReroll(true, new String[]{"X", "Y"});
   }
+  
+  @Test
+  public void testGetResultFiveOfAKind() {
+    runGetResult("Five of a kind", new int[]{4, 4, 4, 4, 4});
+  }
+  
+  @Test
+  public void testGetResultFourOfAKind() {
+    runGetResult("Four of a kind", new int[]{4, 4, 4, 6, 4});
+  }
 }
