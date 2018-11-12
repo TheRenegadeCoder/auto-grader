@@ -217,4 +217,11 @@ public class Project10Test {
     assertEquals(expectedResult, dice);
   }
   
+  private void runRollDice(int[] expectedResult, int[] dice) {
+    Class<?>[] parameters = {int[].class};
+    Object[] args = {dice};
+    runStaticMethod("rollDice", parameters, args);
+    assertEquals(expectedResult, dice);
+  }
+  
 }
