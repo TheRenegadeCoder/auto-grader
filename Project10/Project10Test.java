@@ -230,7 +230,7 @@ public class Project10Test {
   /**
    * A helper method for testing the prompt for reroll method.
    */
-  private void runPromptForReroll(int[] expectedResult, int[] dice, int[] indices) {
+  private void runPromptForReroll(int[] expectedResult, int[] dice, String[] indices) {
     Class<?>[] parameters = {int[].class, Scanner.class};
     Object[] args = {dice, new Scanner(System.in)};
     
@@ -245,7 +245,7 @@ public class Project10Test {
   /**
    * A helper method for testing the prompt for play again method.
    */
-  private void runPromptForPlayAgain(boolean expectResult, String[] playAgain) {
+  private void runPromptForPlayAgain(boolean expectedResult, String[] playAgain) {
     Class<?>[] parameters = {Scanner.class};
     Object[] args = {new Scanner(System.in)};
     
@@ -260,10 +260,20 @@ public class Project10Test {
   /**
    * A helper method for testing the get result method.
    */
-  private void runGetResult(String expectedResult) {
+  private void runGetResult(String expectedResult, int[] dice) {
     Class<?>[] parameters = {int[].class};
     Object[] args = {dice};
     String result = (String) runStaticMethod("getResult", parameters, args);
+    assertEquals(expectedResult, result);
+  }
+  
+  /**
+   * A helper method for testing the get counts method.
+   */
+  private void runGetCounts(int[] expectedResult, int[] dice) {
+    Class<?>[] parameters = {int[].class};
+    Object[] args = {dice};
+    int[] result = (int[]) runStaticMethod("getCounts", parameters, args);
     assertEquals(expectedResult, result);
   }
 }
