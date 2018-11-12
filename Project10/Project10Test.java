@@ -207,4 +207,14 @@ public class Project10Test {
     assertEquals(expectedResult, dice);
   }
   
+  /**
+   * A helper method for testing the dice to string method.
+   */
+  private void runDiceToString(String expectedResult, int[] dice) {
+    Class<?>[] parameters = {int[].class};
+    Object[] args = {dice};
+    runStaticMethod("diceToString", parameters, args);
+    assertEquals(expectedResult, dice);
+  }
+  
 }
