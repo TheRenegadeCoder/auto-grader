@@ -228,13 +228,32 @@ public class Project10Test {
   }
   
   /**
-   * A helper method for testing the prompt for reroll method
+   * A helper method for testing the prompt for reroll method.
    */
-  private void runPromptForReroll(int[] expectedResult, int[] dice) {
+  private void runPromptForReroll(int[] expectedResult, int[] dice, int[] indices) {
     Class<?>[] parameters = {int[].class, Scanner.class};
     Object[] args = {dice, new Scanner(System.in)};
-    runStaticMethod("pomptForRerol", parameters, args);
+    
+    String input = buildLines(indices);
+    InputStream inContent = new ByteArrayInputStream(input.getBytes());
+    System.setIn(inContent);
+    
+    runStaticMethod("promptForReroll", parameters, args);
     assertEquals(expectedResult, dice);
   }
   
+  /**
+   * A helper method for testing the prompt for play again method.
+   */
+  private void runPromptForPlayAgain(boolean expectResult, String[] playAgain) {
+    Class<?>[] parameters = {Scanner.class};
+    Object[] args = {new Scanner(System.in)};
+    
+    String input = buildLines(playAgain);
+    InputStream inContent = new ByteArrayInputStream(input.getBytes());
+    System.setIn(inContent);
+    
+    boolean result = (boolean) runStaticMethod("promptForPlayAgain", parameters, args);
+    assertEquals(expectedResult, result);
+  }
 }
