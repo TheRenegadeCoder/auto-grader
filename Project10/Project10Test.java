@@ -296,4 +296,29 @@ public class Project10Test {
   public void testPromptForReroll() {
     runPromptForReroll(new int[]{0,1,0,1,0}, new int[]{2,1,2,1,2}, new String[]{"0","2","4"});
   }
+  
+  @Test
+  public void testPromptForPlayAgainY() {
+    runPromptForReroll(true, new String[]{"Y"});
+  }
+  
+  @Test
+  public void testPromptForPlayAgainy() {
+    runPromptForReroll(true, new String[]{"y"});
+  }
+  
+  @Test
+  public void testPromptForPlayAgainN() {
+    runPromptForReroll(false, new String[]{"N"});
+  }
+  
+  @Test
+  public void testPromptForPlayAgainn() {
+    runPromptForReroll(false, new String[]{"n"});
+  }
+  
+  @Test
+  public void testPromptForPlayAgainInvalid() {
+    runPromptForReroll(true, new String[]{"X", "Y"});
+  }
 }
