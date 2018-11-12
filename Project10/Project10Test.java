@@ -276,4 +276,14 @@ public class Project10Test {
     int[] result = (int[]) runStaticMethod("getCounts", parameters, args);
     assertEquals(expectedResult, result);
   }
+  
+  @Test
+  public void testResetDice() {
+    runResetDice(new int[]{0, 0, 0, 0, 0}, new int[]{1, 2, 3, 4, 5});
+  }
+  
+  @Test
+  public void testDiceToString() {
+    runDiceToString("0 2 7 5 4", new int[]{0, 2, 7, 5, 4});
+  }
 }
