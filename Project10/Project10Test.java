@@ -217,10 +217,23 @@ public class Project10Test {
     assertEquals(expectedResult, dice);
   }
   
+  /**
+   * A helper method for testing the roll dice method.
+   */
   private void runRollDice(int[] expectedResult, int[] dice) {
     Class<?>[] parameters = {int[].class};
     Object[] args = {dice};
     runStaticMethod("rollDice", parameters, args);
+    assertEquals(expectedResult, dice);
+  }
+  
+  /**
+   * A helper method for testing the prompt for reroll method
+   */
+  private void runPromptForReroll(int[] expectedResult, int[] dice) {
+    Class<?>[] parameters = {int[].class, Scanner.class};
+    Object[] args = {dice, new Scanner(System.in)};
+    runStaticMethod("pomptForRerol", parameters, args);
     assertEquals(expectedResult, dice);
   }
   
