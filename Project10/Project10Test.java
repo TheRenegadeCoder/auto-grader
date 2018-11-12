@@ -256,4 +256,14 @@ public class Project10Test {
     boolean result = (boolean) runStaticMethod("promptForPlayAgain", parameters, args);
     assertEquals(expectedResult, result);
   }
+  
+  /**
+   * A helper method for testing the get result method.
+   */
+  private void runGetResult(String expectedResult) {
+    Class<?>[] parameters = {int[].class};
+    Object[] args = {dice};
+    String result = (String) runStaticMethod("getResult", parameters, args);
+    assertEquals(expectedResult, result);
+  }
 }
