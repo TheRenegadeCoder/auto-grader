@@ -299,36 +299,66 @@ public class Project10Test {
   
   @Test
   public void testPromptForPlayAgainY() {
-    runPromptForReroll(true, new String[]{"Y"});
+    runPromptForPlayAgain(true, new String[]{"Y"});
   }
   
   @Test
   public void testPromptForPlayAgainy() {
-    runPromptForReroll(true, new String[]{"y"});
+    runPromptForPlayAgain(true, new String[]{"y"});
   }
   
   @Test
   public void testPromptForPlayAgainN() {
-    runPromptForReroll(false, new String[]{"N"});
+    runPromptForPlayAgain(false, new String[]{"N"});
   }
   
   @Test
   public void testPromptForPlayAgainn() {
-    runPromptForReroll(false, new String[]{"n"});
+    runPromptForPlayAgain(false, new String[]{"n"});
   }
   
   @Test
   public void testPromptForPlayAgainInvalid() {
-    runPromptForReroll(true, new String[]{"X", "Y"});
+    runPromptForPlayAgain(true, new String[]{"X", "Y"});
   }
   
   @Test
   public void testGetResultFiveOfAKind() {
-    runGetResult("Five of a kind", new int[]{4, 4, 4, 4, 4});
+    runGetResult("Five of a kind!", new int[]{4, 4, 4, 4, 4});
   }
   
   @Test
   public void testGetResultFourOfAKind() {
-    runGetResult("Four of a kind", new int[]{4, 4, 4, 6, 4});
+    runGetResult("Four of a kind!", new int[]{4, 4, 4, 6, 4});
+  }
+  
+  @Test
+  public void testGetResultFullHouse() {
+    runGetResult("Full House!", new int[]{4, 4, 4, 6, 6});
+  }
+  
+  @Test
+  public void testGetResultThreeOfAKind() {
+    runGetResult("Three of a kind!", new int[]{4, 4, 4, 7, 6});
+  }
+  
+  @Test
+  public void testGetResultTwoPair() {
+    runGetResult("Two pair!", new int[]{4, 4, 7, 7, 6});
+  }
+  
+  @Test
+  public void testGetResultOnePair() {
+    runGetResult("One pair!", new int[]{4, 4, 7, 5, 6});
+  }
+  
+  @Test
+  public void testGetResultHighestValue() {
+    runGetResult("Highest value 7", new int[]{4, 1, 7, 5, 6});
+  }
+  
+  @Test
+  public void testGetResultStraight() {
+    runGetResult("Straight!", new int[]{1, 2, 3, 4, 5});
   }
 }
