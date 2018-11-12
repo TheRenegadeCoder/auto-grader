@@ -361,4 +361,9 @@ public class Project10Test {
   public void testGetResultStraight() {
     runGetResult("Straight!", new int[]{1, 2, 3, 4, 5});
   }
+  
+  @Test
+  public void testGetCounts() {
+    runGetCounts(new int []{0, 3, 0, 2, 0, 0, 0, 0, 0, 0}, new int []{1, 3, 1, 3, 1});
+  }
 }
