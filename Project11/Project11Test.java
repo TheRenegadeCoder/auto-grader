@@ -14,18 +14,18 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Tests project 10 as specified by:
- * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project10.html
+ * Tests project 11 as specified by:
+ * http://web.cse.ohio-state.edu/cse1223/currentsem/projects/CSE1223Project11.html
  *
- * This test file verifies that the Project 10 solution passes on the basis of
+ * This test file verifies that the Project 11 solution passes on the basis of
  * content rather than structure. In other words, we don't care if the output
  * doesn't structurally look exactly like the expected output. However, we do
  * care that the solution has all the expected content.
  */
-public class Project10Test {
+public class Project11Test {
   
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-  private static final int PROJECT_NUMBER = 10;
+  private static final int PROJECT_NUMBER = 11;
   private static Class<?> cls = null;
   
   /**
