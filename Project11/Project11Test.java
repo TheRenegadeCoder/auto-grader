@@ -207,4 +207,13 @@ public class Project11Test {
     assertArrayEquals(expectedResult, dice);
   }
   
+  private void runReadNextSeries() {
+  }
+  
+  private void runGetMedian() {
+  }
+  
+  private void runGetAverage() {
+  }
+  
 }
