@@ -224,4 +224,13 @@ public class Project10Test {
     assertEquals("11:12:00 AM", time);
   }
 
+  @Test
+  public void TestSimpleClockTickHour() {
+    SimpleClock test = new SimpleClock();
+    test.set(10, 59, 59, true);
+    test.tick();
+    String time = test.time();
+    assertEquals("11:00:00 AM", time);
+  }
+
 }
