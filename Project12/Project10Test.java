@@ -201,9 +201,18 @@ public class Project10Test {
   @Test
   public void TestSimpleClockSet() {
     SimpleClock test = new SimpleClock();
-    test.set(7, 11, 14, true);
+    test.set(11, 11, 14, true);
     String time = test.time();
-    assertEquals("7:11:14 AM", time);
+    assertEquals("11:11:14 AM", time);
+  }
+
+  @Test
+  public void TestSimpleClockTickSecond() {
+    SimpleClock test = new SimpleClock();
+    test.set(11, 11, 14, true);
+    test.tick();
+    String time = test.time();
+    assertEquals("11:11:15 AM", time);
   }
 
 }
