@@ -10,7 +10,7 @@ archive.extractall(DIR)
 archive.close()
 
 
-DUMP = os.path.join(DIR, "DUMP")
+DUMP = os.path.join(os.path.dirname(DIR), "Dump")
 pathlib.Path(DUMP).mkdir(parents=True, exist_ok=True)
 
 for file in os.listdir(DIR):
