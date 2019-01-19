@@ -1,6 +1,6 @@
 import os
-import zipfile
 import pathlib
+import zipfile
 from tkinter import filedialog
 
 archive_name = filedialog.askopenfilename()
@@ -8,7 +8,6 @@ archive = zipfile.ZipFile(archive_name)
 DIR = os.path.join(os.path.dirname(archive_name), "Archives")
 archive.extractall(DIR)
 archive.close()
-
 
 DUMP = os.path.join(os.path.dirname(DIR), "Dump")
 pathlib.Path(DUMP).mkdir(parents=True, exist_ok=True)
