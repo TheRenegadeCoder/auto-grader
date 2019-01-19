@@ -21,8 +21,6 @@ for file in os.listdir(DIR):
         zip_file = zipfile.ZipFile(file_path, "r")
         zip_file.extractall(file_path_plus_name)
         zip_file.close()
-    elif file_name == "DUMP":
-        pass
     else:
         name = file_name.split("_")[0]
         project = file_name.split("_")[-1]
