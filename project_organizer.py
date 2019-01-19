@@ -1,8 +1,14 @@
 import os
 import zipfile
 import pathlib
+from tkinter import filedialog
 
-DIR = "C:/Users/Jerem/Downloads/CSE_1223_SP2019_8281-Project_1_submissions"
+archive_name = filedialog.askopenfilename()
+archive = zipfile.ZipFile(archive_name)
+DIR = os.path.join(os.path.dirname(archive_name), "Archives")
+archive.extractall(DIR)
+archive.close()
+
 
 DUMP = os.path.join(DIR, "DUMP")
 pathlib.Path(DUMP).mkdir(parents=True, exist_ok=True)
