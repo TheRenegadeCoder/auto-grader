@@ -5,12 +5,17 @@ import subprocess
 from tkinter import filedialog
 
 
-def extract_solutions():
+def extract_main_zip():
     archive_name = filedialog.askopenfilename()
     archive = zipfile.ZipFile(archive_name)
-    DIR = os.path.join(os.path.dirname(archive_name), "Archives")
-    archive.extractall(DIR)
+    archive_path = os.path.join(os.path.dirname(archive_name), "Archives")
+    archive.extractall(archive_path)
     archive.close()
+    return archive_path
+
+
+def extract_solutions():
+    DIR = extract_main_zip()
 
     DUMP = os.path.join(os.path.dirname(DIR), "Dump")
     pathlib.Path(DUMP).mkdir(parents=True, exist_ok=True)
@@ -30,14 +35,16 @@ def extract_solutions():
             new_file_path = os.path.join(DUMP, name, project)
             os.rename(file_path, new_file_path)
 
+    return DUMP
 
-def compile_junit(classpath, test_file):
-    command = "javac -cp \"%s\". \"%s\"" % (classpath, test_file)
+
+def compile_junit(classes, classpath, test_file):
+    command = "javac -d \"%s\" -cp \"%s\". \"%s\"" % (classes, classpath, test_file)
     return run_command(command)
 
 
-def test_junit(classpath, test_class):
-    command = "java -cp \"%s\". org.junit.runner.JUnitCore %s" %(classpath, test_class)
+def test_junit(classes, classpath, test_class):
+    command = "java -cp \"%s;%s\". org.junit.runner.JUnitCore %s" %(classes, classpath, test_class)
     return run_command(command)
 
 
@@ -51,15 +58,20 @@ def run_command(command):
 
 
 def main():
-    #extract_solutions()
+    root = os.path.dirname(extract_solutions())
+    classes = os.path.join(root, "Test")
+    os.mkdir(classes)
 
-    classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-core-2.1.jar;"
+    classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-all-1.3.jar;"
     test_class = "E:\\Projects\\CSE1223\\Projects\\Project03\\Project03Test.java"
-    #build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
-    compile_junit(classpath, test_class)
-    err = test_junit(classpath, "Project03Test")
-    print(err.stdout.decode("utf-8"))
-
+    build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
+    compile_junit(classes, classpath, build_file)
+    compilation_results = compile_junit(classes, classpath, test_class)
+    execution_results = test_junit(classes, classpath, "Project03Test")
+    print(compilation_results)
+    print(execution_results)
+    print(execution_results.stdout.decode("utf-8"))
+    print(execution_results.stderr.decode("utf-8"))
 
 
 if __name__ == '__main__':
