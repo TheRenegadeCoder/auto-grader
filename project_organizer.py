@@ -70,7 +70,7 @@ def run_command(command) -> subprocess.CompletedProcess:
     """
     Runs a system command.
     :param command: a string command
-    :return: the completed process object after execution
+    :return: the completed process object after execution5
     """
     result = subprocess.run(
         command,
@@ -80,9 +80,15 @@ def run_command(command) -> subprocess.CompletedProcess:
     return result
 
 
-def grade_file(classes, build_file):
+def grade_file(classes, build_file, test_class):
+    """
+    Grades a file.
+    :param classes: a directory contain files under test
+    :param build_file: a file to test
+    :param test_class: the path to the test file
+    :return: None
+    """
     classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-all-1.3.jar;"
-    test_class = "E:\\Projects\\CSE1223\\Projects\\Project03\\Project03Test.java"
 
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
@@ -96,6 +102,15 @@ def grade_file(classes, build_file):
 
 
 def automate_grading(root):
+    """
+    Grades all files for a project.
+    :param root:
+    :return:
+    """
+    test_class = filedialog.askopenfilename(
+        title="Select Test File",
+        filetypes=(("java files", "*.java"), ("all files", "*.*"))
+    )
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
     for subdir, dirs, files in os.walk(os.path.join(root, "Dump")):
@@ -105,7 +120,7 @@ def automate_grading(root):
             author_name = get_author_name(file_path)
             classes = os.path.join(test_dir, author_name)
             os.mkdir(classes)
-            grade_file(classes, file_path)
+            grade_file(classes, file_path, test_class)
 
 
 def get_author_name(file_path):
