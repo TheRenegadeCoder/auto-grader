@@ -28,15 +28,14 @@ for file in os.listdir(DIR):
         new_file_path = os.path.join(DUMP, name, project)
         os.rename(file_path, new_file_path)
 
+classpath = "C:/Program Files/JUnit"
+build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
+command = "javac -cp \"%s\";. \"%s\"" % (classpath, build_file)
+
 result = subprocess.run(
-    [
-        "javac",
-        "-cp 'C:\\Program Files\\JUnit';." 
-        "'C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java'"
-    ],
+    command,
     stdout=subprocess.PIPE,
-    stderr=subprocess.PIPE,
-    shell=True
+    stderr=subprocess.PIPE
 )
 
 print(result)
