@@ -1,6 +1,7 @@
 import os
 import pathlib
 import zipfile
+import subprocess
 from tkinter import filedialog
 
 archive_name = filedialog.askopenfilename()
@@ -26,3 +27,16 @@ for file in os.listdir(DIR):
         pathlib.Path(os.path.join(DUMP, name)).mkdir(parents=True, exist_ok=True)
         new_file_path = os.path.join(DUMP, name, project)
         os.rename(file_path, new_file_path)
+
+result = subprocess.run(
+    [
+        "javac",
+        "-cp 'C:\\Program Files\\JUnit';." 
+        "'C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java'"
+    ],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    shell=True
+)
+
+print(result)
