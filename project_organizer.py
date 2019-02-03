@@ -126,7 +126,12 @@ def automate_grading(root):
             grade_file(classes, file_path, test_class)
 
 
-def get_author_name(file_path):
+def get_author_name(file_path: str) -> str:
+    """
+    Extracts author name from file path
+    :param file_path: path to file
+    :return: file name
+    """
     tokens = file_path.split(os.sep)
     index = tokens.index(DUMP)
     return tokens[index + 1]
@@ -135,7 +140,6 @@ def get_author_name(file_path):
 def main():
     root = os.path.dirname(extract_solutions())
     automate_grading(root)
-
 
 
 if __name__ == '__main__':
