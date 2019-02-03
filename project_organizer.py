@@ -31,28 +31,35 @@ def extract_solutions():
             os.rename(file_path, new_file_path)
 
 
-def compile_junit(classpath, build_file):
-    command = "javac -cp \"%s\";. \"%s\"" % (classpath, build_file)
+def compile_junit(classpath, test_file):
+    command = "javac -cp \"%s\". \"%s\"" % (classpath, test_file)
+    return run_command(command)
 
+
+def test_junit(classpath, test_class):
+    command = "java -cp \"%s\". org.junit.runner.JUnitCore %s" %(classpath, test_class)
+    return run_command(command)
+
+
+def run_command(command):
     result = subprocess.run(
         command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
-
-    print(result)
-
-
-def test_junit():
-    command = "java -cp <junit-jar>;<hamcrest-jar>;. org.junit.runner.JUnitCore  TestClass1 TestClass2"
+    return result
 
 
 def main():
-    extract_solutions()
+    #extract_solutions()
 
-    classpath = "C:/Program Files/JUnit"
-    build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
-    compile_junit(classpath, build_file)
+    classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-core-2.1.jar;"
+    test_class = "E:\\Projects\\CSE1223\\Projects\\Project03\\Project03Test.java"
+    #build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
+    compile_junit(classpath, test_class)
+    err = test_junit(classpath, "Project03Test")
+    print(err.stdout.decode("utf-8"))
+
 
 
 if __name__ == '__main__':
