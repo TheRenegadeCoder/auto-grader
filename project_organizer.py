@@ -5,7 +5,11 @@ import subprocess
 from tkinter import filedialog
 
 
-def extract_main_zip():
+def extract_main_zip() -> str:
+    """
+    Extracts an archive given by the user.
+    :return: the path to the unzipped archive
+    """
     archive_name = filedialog.askopenfilename()
     archive = zipfile.ZipFile(archive_name)
     archive_path = os.path.join(os.path.dirname(archive_name), "Archives")
@@ -15,14 +19,14 @@ def extract_main_zip():
 
 
 def extract_solutions():
-    DIR = extract_main_zip()
+    unzipped_archive = extract_main_zip()
 
-    DUMP = os.path.join(os.path.dirname(DIR), "Dump")
+    DUMP = os.path.join(os.path.dirname(unzipped_archive), "Dump")
     pathlib.Path(DUMP).mkdir(parents=True, exist_ok=True)
 
-    for file in os.listdir(DIR):
+    for file in os.listdir(unzipped_archive):
         file_name = os.fsdecode(file)
-        file_path = os.path.join(DIR, file_name)
+        file_path = os.path.join(unzipped_archive, file_name)
         file_path_plus_name = os.path.join(DUMP, file_name.split("_")[0])
         if file_name.endswith(".zip"):
             zip_file = zipfile.ZipFile(file_path, "r")
