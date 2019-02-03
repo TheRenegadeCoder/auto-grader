@@ -60,26 +60,35 @@ def run_command(command):
 def grade_file(classes, build_file):
     classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-all-1.3.jar;"
     test_class = "E:\\Projects\\CSE1223\\Projects\\Project03\\Project03Test.java"
-    #build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
 
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
     execution_results = test_junit(classes, classpath, "Project03Test")
 
-    print(compilation_results)
-    print(execution_results)
+    print(build_file)
+    print(compilation_results.stdout.decode("utf-8"))
+    print(compilation_results.stderr.decode("utf-8"))
     print(execution_results.stdout.decode("utf-8"))
     print(execution_results.stderr.decode("utf-8"))
 
 
 def automate_grading(root):
-    classes = os.path.join(root, "Test")
-    os.mkdir(classes)
+    test_dir = os.path.join(root, "Test")
+    os.mkdir(test_dir)
     for subdir, dirs, files in os.walk(os.path.join(root, "Dump")):
         java_files = [name for name in files if ".java" in name and "module-info" not in name]
         for file_name in java_files:
             file_path = os.path.join(subdir, file_name)
+            author_name = get_author_name(file_path)
+            classes = os.path.join(test_dir, author_name)
+            os.mkdir(classes)
             grade_file(classes, file_path)
+
+
+def get_author_name(file_path):
+    tokens = file_path.split(os.sep)
+    index = tokens.index("Dump")
+    return tokens[index + 1]
 
 
 def main():
