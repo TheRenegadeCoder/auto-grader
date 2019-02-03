@@ -42,7 +42,14 @@ def extract_solutions():
     return DUMP
 
 
-def compile_junit(classes, classpath, test_file):
+def compile_junit(classes, classpath, test_file) -> subprocess.CompletedProcess:
+    """
+    Runs the java compilation command.
+    :param classes: a directory of classes under test
+    :param classpath: a list of dependencies
+    :param test_file: a test file to be compiled
+    :return: the completed process object after compilation
+    """
     command = "javac -d \"%s\" -cp \"%s\". \"%s\"" % (classes, classpath, test_file)
     return run_command(command)
 
