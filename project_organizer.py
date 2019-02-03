@@ -4,6 +4,9 @@ import zipfile
 import subprocess
 from tkinter import filedialog
 
+ARCHIVE = "Archives"
+DUMP = "Dump"
+
 
 def extract_main_zip() -> str:
     """
@@ -12,7 +15,7 @@ def extract_main_zip() -> str:
     """
     archive_name = filedialog.askopenfilename()
     archive = zipfile.ZipFile(archive_name)
-    archive_path = os.path.join(os.path.dirname(archive_name), "Archives")
+    archive_path = os.path.join(os.path.dirname(archive_name), ARCHIVE)
     archive.extractall(archive_path)
     archive.close()
     return archive_path
@@ -21,13 +24,13 @@ def extract_main_zip() -> str:
 def extract_solutions():
     unzipped_archive = extract_main_zip()
 
-    DUMP = os.path.join(os.path.dirname(unzipped_archive), "Dump")
-    pathlib.Path(DUMP).mkdir(parents=True, exist_ok=True)
+    dump = os.path.join(os.path.dirname(unzipped_archive), DUMP)
+    pathlib.Path(dump).mkdir(parents=True, exist_ok=True)
 
     for file in os.listdir(unzipped_archive):
         file_name = os.fsdecode(file)
         file_path = os.path.join(unzipped_archive, file_name)
-        file_path_plus_name = os.path.join(DUMP, file_name.split("_")[0])
+        file_path_plus_name = os.path.join(dump, file_name.split("_")[0])
         if file_name.endswith(".zip"):
             zip_file = zipfile.ZipFile(file_path, "r")
             zip_file.extractall(file_path_plus_name)
@@ -35,11 +38,11 @@ def extract_solutions():
         else:
             name = file_name.split("_")[0]
             project = file_name.split("_")[-1]
-            pathlib.Path(os.path.join(DUMP, name)).mkdir(parents=True, exist_ok=True)
-            new_file_path = os.path.join(DUMP, name, project)
+            pathlib.Path(os.path.join(dump, name)).mkdir(parents=True, exist_ok=True)
+            new_file_path = os.path.join(dump, name, project)
             os.rename(file_path, new_file_path)
 
-    return DUMP
+    return dump
 
 
 def compile_junit(classes, classpath, test_file) -> subprocess.CompletedProcess:
@@ -104,8 +107,8 @@ def grade_file(classes, build_file, test_class):
 def automate_grading(root):
     """
     Grades all files for a project.
-    :param root:
-    :return:
+    :param root: the root directory for all the folders
+    :return: None
     """
     test_class = filedialog.askopenfilename(
         title="Select Test File",
@@ -113,7 +116,7 @@ def automate_grading(root):
     )
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
-    for subdir, dirs, files in os.walk(os.path.join(root, "Dump")):
+    for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
         java_files = [name for name in files if ".java" in name and "module-info" not in name]
         for file_name in java_files:
             file_path = os.path.join(subdir, file_name)
@@ -125,7 +128,7 @@ def automate_grading(root):
 
 def get_author_name(file_path):
     tokens = file_path.split(os.sep)
-    index = tokens.index("Dump")
+    index = tokens.index(DUMP)
     return tokens[index + 1]
 
 
