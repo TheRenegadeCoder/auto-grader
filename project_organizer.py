@@ -54,12 +54,24 @@ def compile_junit(classes, classpath, test_file) -> subprocess.CompletedProcess:
     return run_command(command)
 
 
-def test_junit(classes, classpath, test_class):
+def test_junit(classes, classpath, test_class) -> subprocess.CompletedProcess:
+    """
+    Runs the java execution command.
+    :param classes: a directory of classes under test
+    :param classpath: a list of dependencies
+    :param test_class: a test file to be executed
+    :return: the completed process object after execution
+    """
     command = "java -cp \"%s;%s\". org.junit.runner.JUnitCore %s" %(classes, classpath, test_class)
     return run_command(command)
 
 
-def run_command(command):
+def run_command(command) -> subprocess.CompletedProcess:
+    """
+    Runs a system command.
+    :param command: a string command
+    :return: the completed process object after execution
+    """
     result = subprocess.run(
         command,
         stdout=subprocess.PIPE,
