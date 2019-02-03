@@ -57,13 +57,10 @@ def run_command(command):
     return result
 
 
-def automate_grading(root):
-    classes = os.path.join(root, "Test")
-    os.mkdir(classes)
-
+def grade_file(classes, build_file):
     classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-all-1.3.jar;"
     test_class = "E:\\Projects\\CSE1223\\Projects\\Project03\\Project03Test.java"
-    build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
+    #build_file = "C:\\Users\\Jerem\\Downloads\\Dump\\thaparanjana\\Project03\\osu\\cse1223\\Project03.java"
 
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
@@ -75,14 +72,20 @@ def automate_grading(root):
     print(execution_results.stderr.decode("utf-8"))
 
 
+def automate_grading(root):
+    classes = os.path.join(root, "Test")
+    os.mkdir(classes)
+    for subdir, dirs, files in os.walk(os.path.join(root, "Dump")):
+        java_files = [name for name in files if ".java" in name and "module-info" not in name]
+        for file_name in java_files:
+            file_path = os.path.join(subdir, file_name)
+            grade_file(classes, file_path)
+
+
 def main():
     root = os.path.dirname(extract_solutions())
     automate_grading(root)
-    for subdir, dirs, files in os.walk(os.path.join(root, "Dump")):
-        java_files = [name for name in files if ".java" in name and "module-info" not in name]
-        if java_files:
-            print(subdir)
-            print(java_files)
+
 
 
 if __name__ == '__main__':
