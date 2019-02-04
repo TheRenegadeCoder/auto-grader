@@ -48,7 +48,7 @@ def extract_solutions():
     return dump
 
 
-def compile_junit(classes, classpath, test_file) -> subprocess.CompletedProcess:
+def compile_junit(classes: str, classpath: str, test_file: str) -> subprocess.CompletedProcess:
     """
     Runs the java compilation command.
     :param classes: a directory of classes under test
@@ -60,7 +60,7 @@ def compile_junit(classes, classpath, test_file) -> subprocess.CompletedProcess:
     return run_command(command)
 
 
-def test_junit(classes, classpath, test_class) -> subprocess.CompletedProcess:
+def test_junit(classes: str , classpath: str, test_class: str) -> subprocess.CompletedProcess:
     """
     Runs the java execution command.
     :param classes: a directory of classes under test
@@ -72,7 +72,7 @@ def test_junit(classes, classpath, test_class) -> subprocess.CompletedProcess:
     return run_command(command)
 
 
-def run_command(command) -> subprocess.CompletedProcess:
+def run_command(command: str) -> subprocess.CompletedProcess:
     """
     Runs a system command.
     :param command: a string command
@@ -86,7 +86,7 @@ def run_command(command) -> subprocess.CompletedProcess:
     return result
 
 
-def grade_file(classes, build_file, test_class, results):
+def grade_file(classes: str, build_file: str, test_class: str, results):
     """
     Grades a file.
     :param classes: a directory contain files under test
@@ -100,7 +100,21 @@ def grade_file(classes, build_file, test_class, results):
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
     execution_results = test_junit(classes, classpath, get_test_name(test_class))
+    write_to_file(results, compilation_results, execution_results, build_file)
 
+
+def write_to_file(results, compilation_results: subprocess.CompletedProcess, execution_results: subprocess.CompletedProcess, build_file: str):
+    """
+    Writes results to a file.
+    :param results: the open file reference
+    :param compilation_results: the completed process object from compilation
+    :param execution_results: the completed process object from execution
+    :param build_file: the path to the student's solution
+    :return: None
+    """
+    header = "+++++++++++++++ %s ++++++++++++++++" % get_author_name(build_file)
+    print(header, file=results)
+    print(file=results)
     print(build_file, file=results)
     print(compilation_results.stdout.decode("utf-8"), file=results)
     print(compilation_results.stderr.decode("utf-8"), file=results)
@@ -108,7 +122,7 @@ def grade_file(classes, build_file, test_class, results):
     print(execution_results.stderr.decode("utf-8"), file=results)
 
 
-def automate_grading(root):
+def automate_grading(root: str):
     """
     Grades all files for a project.
     :param root: the root directory for all the folders
