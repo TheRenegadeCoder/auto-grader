@@ -25,6 +25,10 @@ def extract_main_zip() -> str:
 
 
 def extract_solutions():
+    """
+    Extracts user folders.
+    :return: the path to the extraction site
+    """
     unzipped_archive = extract_main_zip()
 
     dump = os.path.join(os.path.dirname(unzipped_archive), DUMP)
