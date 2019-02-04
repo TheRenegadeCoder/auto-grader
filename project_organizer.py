@@ -95,7 +95,7 @@ def grade_file(classes, build_file, test_class):
 
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
-    execution_results = test_junit(classes, classpath, "Project03Test")
+    execution_results = test_junit(classes, classpath, get_test_name(test_class))
 
     print(build_file)
     print(compilation_results.stdout.decode("utf-8"))
@@ -135,6 +135,11 @@ def get_author_name(file_path: str) -> str:
     tokens = file_path.split(os.sep)
     index = tokens.index(DUMP)
     return tokens[index + 1]
+
+
+def get_test_name(test_path: str) -> str:
+    test_name = test_path.split("/")[-1].split(".")[0]
+    return test_name
 
 
 def main():
