@@ -13,7 +13,10 @@ def extract_main_zip() -> str:
     Extracts an archive given by the user.
     :return: the path to the unzipped archive
     """
-    archive_name = filedialog.askopenfilename()
+    archive_name = filedialog.askopenfilename(
+        title="Select Zip File",
+        filetypes=(("zip files", "*.zip"), ("all files", "*.*"))
+    )
     archive = zipfile.ZipFile(archive_name)
     archive_path = os.path.join(os.path.dirname(archive_name), ARCHIVE)
     archive.extractall(archive_path)
@@ -83,12 +86,13 @@ def run_command(command) -> subprocess.CompletedProcess:
     return result
 
 
-def grade_file(classes, build_file, test_class):
+def grade_file(classes, build_file, test_class, results):
     """
     Grades a file.
     :param classes: a directory contain files under test
     :param build_file: a file to test
     :param test_class: the path to the test file
+    :param results: the results file
     :return: None
     """
     classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-all-1.3.jar;"
@@ -97,11 +101,11 @@ def grade_file(classes, build_file, test_class):
     compilation_results = compile_junit(classes, classpath, test_class)
     execution_results = test_junit(classes, classpath, get_test_name(test_class))
 
-    print(build_file)
-    print(compilation_results.stdout.decode("utf-8"))
-    print(compilation_results.stderr.decode("utf-8"))
-    print(execution_results.stdout.decode("utf-8"))
-    print(execution_results.stderr.decode("utf-8"))
+    print(build_file, file=results)
+    print(compilation_results.stdout.decode("utf-8"), file=results)
+    print(compilation_results.stderr.decode("utf-8"), file=results)
+    print(execution_results.stdout.decode("utf-8"), file=results)
+    print(execution_results.stderr.decode("utf-8"), file=results)
 
 
 def automate_grading(root):
@@ -116,14 +120,15 @@ def automate_grading(root):
     )
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
-    for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
-        java_files = [name for name in files if ".java" in name and "module-info" not in name]
-        for file_name in java_files:
-            file_path = os.path.join(subdir, file_name)
-            author_name = get_author_name(file_path)
-            classes = os.path.join(test_dir, author_name)
-            os.mkdir(classes)
-            grade_file(classes, file_path, test_class)
+    with open(os.path.join(root, "results.txt"), "w") as results:
+        for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
+            java_files = [name for name in files if ".java" in name and "module-info" not in name]
+            for file_name in java_files:
+                file_path = os.path.join(subdir, file_name)
+                author_name = get_author_name(file_path)
+                classes = os.path.join(test_dir, author_name)
+                os.mkdir(classes)
+                grade_file(classes, file_path, test_class, results)
 
 
 def get_author_name(file_path: str) -> str:
@@ -138,6 +143,11 @@ def get_author_name(file_path: str) -> str:
 
 
 def get_test_name(test_path: str) -> str:
+    """
+    Retrieves test name from file name.
+    :param test_path: the path of the test file
+    :return: the test file name without the file extension
+    """
     test_name = test_path.split("/")[-1].split(".")[0]
     return test_name
 
