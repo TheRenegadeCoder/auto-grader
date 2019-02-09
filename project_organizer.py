@@ -151,7 +151,7 @@ def automate_grading(root: str):
                 classes = os.path.join(test_dir, author_name, file_name.split(".")[0])
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
                 student_grade_report = grade_file(classes, file_path, test_class, results)
-                grade_report[get_author_name(author_name)] = student_grade_report
+                grade_report[author_name] = student_grade_report
         write_to_file(results, grade_report)
 
 
