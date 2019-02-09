@@ -145,7 +145,7 @@ def automate_grading(root: str):
                 file_path = os.path.join(subdir, file_name)
                 author_name = get_author_name(file_path)
                 classes = os.path.join(test_dir, author_name)
-                os.mkdir(classes)
+                os.mkdir(classes + "-" + file_name)
                 grade_file(classes, file_path, test_class, results)
 
 
