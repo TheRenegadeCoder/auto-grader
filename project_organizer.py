@@ -2,6 +2,7 @@ import os
 import pathlib
 import zipfile
 import subprocess
+import json
 from tkinter import filedialog
 
 ARCHIVE = "Archives"
@@ -90,7 +91,7 @@ def run_command(command: str) -> subprocess.CompletedProcess:
     return result
 
 
-def grade_file(classes: str, build_file: str, test_class: str, results):
+def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
     """
     Grades a file.
     :param classes: a directory contain files under test
@@ -104,26 +105,29 @@ def grade_file(classes: str, build_file: str, test_class: str, results):
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
     execution_results = test_junit(classes, classpath, get_test_name(test_class))
-    write_to_file(results, compilation_results, execution_results, build_file)
+    student_grade_report = generate_student_json(compilation_results, execution_results, build_file)
+    return student_grade_report
 
 
-def write_to_file(results, compilation_results: subprocess.CompletedProcess, execution_results: subprocess.CompletedProcess, build_file: str):
+def generate_student_json(compilation_results: subprocess.CompletedProcess, execution_results: subprocess.CompletedProcess, build_file: str) -> dict:
+    output_dict = dict()
+    output_dict["author"] = get_author_name(build_file)
+    output_dict["path"] = build_file
+    output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
+    output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
+    output_dict["execution_stdout"] = execution_results.stdout.decode("utf-8")
+    output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
+    return output_dict
+
+
+def write_to_file(results, grade_report: list):
     """
     Writes results to a file.
     :param results: the open file reference
-    :param compilation_results: the completed process object from compilation
-    :param execution_results: the completed process object from execution
-    :param build_file: the path to the student's solution
+    :param grade_report: a list of grades
     :return: None
     """
-    header = "+++++++++++++++ %s ++++++++++++++++" % get_author_name(build_file)
-    print(header, file=results)
-    print(file=results)
-    print(build_file, file=results)
-    print(compilation_results.stdout.decode("utf-8"), file=results)
-    print(compilation_results.stderr.decode("utf-8"), file=results)
-    print(execution_results.stdout.decode("utf-8"), file=results)
-    print(execution_results.stderr.decode("utf-8"), file=results)
+    json.dump(grade_report, results)
 
 
 def automate_grading(root: str):
@@ -138,7 +142,8 @@ def automate_grading(root: str):
     )
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
-    with open(os.path.join(root, "results.txt"), "w") as results:
+    grade_report = []
+    with open(os.path.join(root, "results.json"), "w") as results:
         for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
             java_files = [name for name in files if ".java" in name and "module-info" not in name]
             for file_name in java_files:
@@ -146,7 +151,9 @@ def automate_grading(root: str):
                 author_name = get_author_name(file_path)
                 classes = os.path.join(test_dir, author_name, file_name.split(".")[0])
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
-                grade_file(classes, file_path, test_class, results)
+                student_grade_report = grade_file(classes, file_path, test_class, results)
+                grade_report.append(student_grade_report)
+        write_to_file(results, grade_report)
 
 
 def get_author_name(file_path: str) -> str:
