@@ -144,7 +144,7 @@ def automate_grading(root: str):
             for file_name in java_files:
                 file_path = os.path.join(subdir, file_name)
                 author_name = get_author_name(file_path)
-                classes = os.path.join(test_dir, author_name, "-", file_name.split(".")[0])
+                classes = os.path.join(test_dir, author_name, file_name.split(".")[0])
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
                 grade_file(classes, file_path, test_class, results)
 
