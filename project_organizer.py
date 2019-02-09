@@ -111,7 +111,6 @@ def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
 
 def generate_student_json(compilation_results: subprocess.CompletedProcess, execution_results: subprocess.CompletedProcess, build_file: str) -> dict:
     output_dict = dict()
-    output_dict["author"] = get_author_name(build_file)
     output_dict["path"] = build_file
     output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
@@ -120,14 +119,14 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess, exec
     return output_dict
 
 
-def write_to_file(results, grade_report: list):
+def write_to_file(results, grade_report: dict):
     """
     Writes results to a file.
     :param results: the open file reference
     :param grade_report: a list of grades
     :return: None
     """
-    json.dump(grade_report, results)
+    json.dump(grade_report, results, indent=4)
 
 
 def automate_grading(root: str):
@@ -142,7 +141,7 @@ def automate_grading(root: str):
     )
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
-    grade_report = []
+    grade_report = dict()
     with open(os.path.join(root, "results.json"), "w") as results:
         for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
             java_files = [name for name in files if ".java" in name and "module-info" not in name]
@@ -152,7 +151,7 @@ def automate_grading(root: str):
                 classes = os.path.join(test_dir, author_name, file_name.split(".")[0])
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
                 student_grade_report = grade_file(classes, file_path, test_class, results)
-                grade_report.append(student_grade_report)
+                grade_report[get_author_name(author_name)] = student_grade_report
         write_to_file(results, grade_report)
 
 
