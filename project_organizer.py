@@ -114,7 +114,7 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess, exec
     output_dict["path"] = build_file
     output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
-    output_dict["execution_stdout"] = execution_results.stdout.decode("utf-8")
+    output_dict["execution_stdout"] = execution_results.stdout.decode("utf-8").splitlines()
     output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
     return output_dict
 
