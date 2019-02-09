@@ -119,6 +119,16 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess, exec
     return output_dict
 
 
+def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
+    test_results = dict()
+    raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
+    for line in raw_test_results:
+        if "version" in line:
+            test_results["junit_version"] = line.split()[-1]
+        elif "Time" in line:
+            test_results["time"] = line.split()[-1]
+
+
 def write_to_file(results, grade_report: dict):
     """
     Writes results to a file.
