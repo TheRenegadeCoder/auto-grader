@@ -3,6 +3,7 @@ import pathlib
 import zipfile
 import subprocess
 import json
+import re
 from tkinter import filedialog
 
 ARCHIVE = "Archives"
@@ -122,11 +123,20 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess, exec
 def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
     test_results = dict()
     raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
-    for line in raw_test_results:
+    i = 0
+    while 0 < len(raw_test_results):
+        line = raw_test_results[i]
+
         if "version" in line:
             test_results["junit_version"] = line.split()[-1]
         elif "Time" in line:
             test_results["time"] = line.split()[-1]
+        elif "Failures" in line:
+            test_results["failure_count"] = line.split()[-1]
+        elif re.search(r"\d+\)", line):
+            test_results["failed_test_cases"] = line
+
+    return test_results
 
 
 def write_to_file(results, grade_report: dict):
