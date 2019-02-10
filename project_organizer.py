@@ -146,15 +146,15 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
 def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int) -> int:
     test_case = raw_test_results[index].split()[-1]
     failed_test_cases[test_case] = dict()
-    line = raw_test_results[index]
     failed_test_cases[test_case]["trace"] = list()
-    index += 1
-    while not re.search(r"\d+\) ", line) and "" not in line:
+    line = raw_test_results[index]
+    next_failed_index = str(int(line[0]) + 1)
+    while len(line) != 0 and line[0] != next_failed_index:
         if "\t" in line:
             failed_test_cases[test_case]["trace"].append(line)
         elif "expected" in line:
             comparison = line.split()
-            failed_test_cases[test_case]["expected"] = comparison[2].replace("expected:", "")
+            failed_test_cases[test_case]["expected"] = comparison[1].replace("expected:", "")
             failed_test_cases[test_case]["was"] = comparison[-1].replace("was:", "")
         index += 1
         line = raw_test_results[index]
