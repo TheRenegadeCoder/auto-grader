@@ -132,23 +132,30 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
     test_results["failed_test_cases"] = dict()
     raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     i = 0
-    while i < len(raw_test_results):
-        line = raw_test_results[i]
+    if len(raw_test_results) > 2:
+        test_results["run_status"] = "SUCCESS"
+        while i < len(raw_test_results):
+            line = raw_test_results[i]
 
-        if "version" in line:
-            test_results["junit_version"] = line.split()[-1]
-        elif "Time" in line:
-            test_results["time"] = float(line.split()[-1])
-        elif "Failures" in line:
-            fails = int(line.split()[-1])
-            successes = int(line.split()[2][:2]) - fails
-            test_results["failure_count"] = fails
-            test_results["success_count"] = successes
-        elif re.search(r"\d+\) ", line):
-            failed_test_cases = test_results["failed_test_cases"]
-            i = parse_test_cases(raw_test_results, failed_test_cases, i)
+            if "version" in line:
+                test_results["junit_version"] = line.split()[-1]
+            elif "Time" in line:
+                test_results["time"] = float(line.split()[-1])
+            elif "Failures" in line:
+                fails = int(line.split()[-1])
+                successes = int(line.split()[2][:2]) - fails
+                test_results["failure_count"] = fails
+                test_results["success_count"] = successes
+            elif re.search(r"\d+\) ", line):
+                failed_test_cases = test_results["failed_test_cases"]
+                i = parse_test_cases(raw_test_results, failed_test_cases, i)
 
-        i += 1
+            i += 1
+    else:
+        test_results["run_status"] = "FAILURE"
+        test_results["failure_count"] = 16
+        test_results["success_count"] = 0
+        i += 2
 
     return test_results
 
@@ -202,7 +209,8 @@ def automate_grading(root: str):
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
     grade_report = dict()
-    with open(os.path.join(root, "results.json"), "w") as results:
+    json_file = get_test_name(test_class) + ".json"
+    with open(os.path.join(root, json_file), "w") as results:
         for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
             java_files = [name for name in files if ".java" in name and "module-info" not in name]
             for file_name in java_files:
