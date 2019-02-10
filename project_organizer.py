@@ -133,7 +133,10 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
         elif "Time" in line:
             test_results["time"] = line.split()[-1]
         elif "Failures" in line:
-            test_results["failure_count"] = line.split()[-1]
+            fails = int(line.split()[-1])
+            successes = int(line.split()[2][:2]) - fails
+            test_results["failure_count"] = fails
+            test_results["success_count"] = successes
         elif re.search(r"\d+\) ", line):
             failed_test_cases = test_results["failed_test_cases"]
             i = parse_test_cases(raw_test_results, failed_test_cases, i)
@@ -144,6 +147,14 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
 
 
 def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int) -> int:
+    """
+    Parses a test case.
+
+    :param raw_test_results: the list of test results by line
+    :param failed_test_cases: the failed test cases dictionary
+    :param index: the current index into the raw test results
+    :return: the index at the end of execution
+    """
     test_case = raw_test_results[index].split()[-1]
     failed_test_cases[test_case] = dict()
     failed_test_cases[test_case]["trace"] = list()
@@ -151,7 +162,7 @@ def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int
     next_failed_index = str(int(line[0]) + 1)
     while len(line) != 0 and line[0] != next_failed_index:
         if "\t" in line:
-            failed_test_cases[test_case]["trace"].append(line)
+            failed_test_cases[test_case]["trace"].append(line.replace("\t", ""))
         elif "expected" in line:
             comparison = line.split()
             failed_test_cases[test_case]["expected"] = comparison[1].replace("expected:", "")
