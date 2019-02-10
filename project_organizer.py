@@ -115,16 +115,17 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess, exec
     output_dict["path"] = build_file
     output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
-    output_dict["execution_stdout"] = execution_results.stdout.decode("utf-8").splitlines()
+    output_dict["execution_stdout"] = parse_test_results(execution_results)
     output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
     return output_dict
 
 
 def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
     test_results = dict()
+    test_results["failed_test_cases"] = list()
     raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     i = 0
-    while 0 < len(raw_test_results):
+    while i < len(raw_test_results):
         line = raw_test_results[i]
 
         if "version" in line:
@@ -134,9 +135,18 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
         elif "Failures" in line:
             test_results["failure_count"] = line.split()[-1]
         elif re.search(r"\d+\)", line):
-            test_results["failed_test_cases"] = line
+            parse_test_cases(raw_test_results, test_results, i)
+
+        i += 1
 
     return test_results
+
+
+def parse_test_cases(raw_test_results: list, test_results, index: int) -> int:
+    test_cases = dict()
+    # test_results["failed_test_cases"].append(test_case)
+    # TODO
+    return index
 
 
 def write_to_file(results, grade_report: dict):
