@@ -128,7 +128,20 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess,
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
     output_dict["execution_stdout"] = parse_test_results(raw_test_results)
     output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
+    output_dict["grade_estimate"] = calculate_grade(output_dict)
     return output_dict
+
+
+def calculate_grade(student: dict) -> float:
+    if student["run_status"] == "FAILURE":
+        grade_estimate = 0
+    else:
+        test_data = student["execution_stdout"]
+        failed_tests = test_data["failure_count"]
+        passed_tests = test_data["success_count"]
+        total_tests = failed_tests + passed_tests
+        grade_estimate = (passed_tests / total_tests) * 10
+    return grade_estimate
 
 
 def read_solution(solution_path):
@@ -162,6 +175,9 @@ def parse_test_results(raw_test_results: list) -> dict:
             successes = int(line.split()[2][:2]) - fails
             test_results["failure_count"] = fails
             test_results["success_count"] = successes
+        elif "OK (" in line: # Passed all tests
+            test_results["failure_count"] = 0
+            test_results["success_count"] = int(line.split()[1][1:])
         elif re.search(r"\d+\) ", line):
             failed_test_cases = test_results["failed_test_cases"]
             i = parse_test_cases(raw_test_results, failed_test_cases, i)
@@ -231,11 +247,11 @@ def automate_grading(root: str):
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
                 student_grade_report = grade_file(classes, file_path, test_class, results)
                 grade_report["students"][author_name] = student_grade_report
-        successful_run_count(grade_report)
+        report_meta_data(grade_report)
         write_to_file(results, grade_report)
 
 
-def successful_run_count(grade_report: dict):
+def report_meta_data(grade_report: dict):
     """
     Adds some meta data to the report such as the number of successful runs.
     :param grade_report: the grade report dictionary
@@ -259,7 +275,7 @@ def successful_run_count(grade_report: dict):
     grade_report["failing_runs"] = failed_runs
     grade_report["passed_test_cases"] = total_passed_test_cases
     grade_report["failed_test_cases"] = total_failed_test_cases
-    grade_report["skipped_test_cases"] = skipped_test_cases
+    grade_report["skipped_test_cases"] = int(skipped_test_cases)
 
 
 def get_author_name(file_path: str) -> str:
