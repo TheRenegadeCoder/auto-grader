@@ -112,6 +112,13 @@ def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
 
 def generate_student_json(compilation_results: subprocess.CompletedProcess,
                           execution_results: subprocess.CompletedProcess, build_file: str) -> dict:
+    """
+    Generates the json solution.
+    :param compilation_results: the compilations results process
+    :param execution_results: the execution results process
+    :param build_file: path to solution
+    :return: the data dictionary
+    """
     raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     output_dict = dict()
     output_dict["path"] = build_file
@@ -125,6 +132,11 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess,
 
 
 def read_solution(solution_path):
+    """
+    Reads the solution and returns it as a list of lines.
+    :param solution_path: path to the solution
+    :return: the solution as a list of lines
+    """
     with open(solution_path) as solution:
         data = solution.readlines()
     return data
