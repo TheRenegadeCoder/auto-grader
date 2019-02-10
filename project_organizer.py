@@ -113,11 +113,18 @@ def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
 def generate_student_json(compilation_results: subprocess.CompletedProcess, execution_results: subprocess.CompletedProcess, build_file: str) -> dict:
     output_dict = dict()
     output_dict["path"] = build_file
+    output_dict["solution"] = read_solution(build_file)
     output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
     output_dict["execution_stdout"] = parse_test_results(execution_results)
     output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
     return output_dict
+
+
+def read_solution(solution_path):
+    with open(solution_path) as solution:
+        data = solution.readlines()
+    return data
 
 
 def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
@@ -131,7 +138,7 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
         if "version" in line:
             test_results["junit_version"] = line.split()[-1]
         elif "Time" in line:
-            test_results["time"] = line.split()[-1]
+            test_results["time"] = float(line.split()[-1])
         elif "Failures" in line:
             fails = int(line.split()[-1])
             successes = int(line.split()[2][:2]) - fails
