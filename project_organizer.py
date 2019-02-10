@@ -204,8 +204,8 @@ def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int
     failed_test_cases[test_case] = dict()
     failed_test_cases[test_case]["trace"] = list()
     line = raw_test_results[index]
-    next_failed_index = str(int(line[0]) + 1)
-    while len(line) != 0 and line[0] != next_failed_index:
+    next_failed_index = str(int(line[:line.find(")")]) + 1)
+    while len(line) != 0 and line[:line.find(")")] != next_failed_index:
         if "\t" in line:
             failed_test_cases[test_case]["trace"].append(line.replace("\t", ""))
         elif "expected" in line:
