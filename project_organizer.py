@@ -143,6 +143,11 @@ def read_solution(solution_path):
 
 
 def parse_test_results(raw_test_results: list) -> dict:
+    """
+    Parses a list of test results.
+    :param raw_test_results: a list of test results
+    :return: the results as a dictionary
+    """
     test_results = dict()
     test_results["failed_test_cases"] = dict()
     i = 0
@@ -214,6 +219,7 @@ def automate_grading(root: str):
     test_dir = os.path.join(root, "Test")
     os.mkdir(test_dir)
     grade_report = dict()
+    grade_report["students"] = dict()
     json_file = get_test_name(test_class) + ".json"
     with open(os.path.join(root, json_file), "w") as results:
         for subdir, dirs, files in os.walk(os.path.join(root, DUMP)):
@@ -224,8 +230,23 @@ def automate_grading(root: str):
                 classes = os.path.join(test_dir, author_name, file_name.split(".")[0])
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
                 student_grade_report = grade_file(classes, file_path, test_class, results)
-                grade_report[author_name] = student_grade_report
+                grade_report["students"][author_name] = student_grade_report
+        successful_run_count(grade_report)
         write_to_file(results, grade_report)
+
+
+def successful_run_count(grade_report: dict):
+    """
+    Adds some meta data to the report such as the number of successful runs.
+    :param grade_report: the grade report dictionary
+    :return: None
+    """
+    success = 0
+    for student in grade_report["students"]:
+        if grade_report["students"][student]["run_status"] == "SUCCESS":
+            success += 1
+    grade_report["successful_runs"] = success
+    grade_report["failing_runs"] = len(grade_report["students"]) - success
 
 
 def get_author_name(file_path: str) -> str:
