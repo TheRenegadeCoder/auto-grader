@@ -66,7 +66,7 @@ def compile_junit(classes: str, classpath: str, test_file: str) -> subprocess.Co
     return run_command(command)
 
 
-def test_junit(classes: str , classpath: str, test_class: str) -> subprocess.CompletedProcess:
+def test_junit(classes: str, classpath: str, test_class: str) -> subprocess.CompletedProcess:
     """
     Runs the java execution command.
     :param classes: a directory of classes under test
@@ -74,7 +74,7 @@ def test_junit(classes: str , classpath: str, test_class: str) -> subprocess.Com
     :param test_class: a test file to be executed
     :return: the completed process object after execution
     """
-    command = "java -cp \"%s;%s\". org.junit.runner.JUnitCore %s" %(classes, classpath, test_class)
+    command = "java -cp \"%s;%s\". org.junit.runner.JUnitCore %s" % (classes, classpath, test_class)
     return run_command(command)
 
 
@@ -110,13 +110,16 @@ def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
     return student_grade_report
 
 
-def generate_student_json(compilation_results: subprocess.CompletedProcess, execution_results: subprocess.CompletedProcess, build_file: str) -> dict:
+def generate_student_json(compilation_results: subprocess.CompletedProcess,
+                          execution_results: subprocess.CompletedProcess, build_file: str) -> dict:
+    raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     output_dict = dict()
     output_dict["path"] = build_file
+    output_dict["run_status"] = "SUCCESS" if len(raw_test_results) > 2 else "FAILURE"
     output_dict["solution"] = read_solution(build_file)
     output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
-    output_dict["execution_stdout"] = parse_test_results(execution_results)
+    output_dict["execution_stdout"] = parse_test_results(raw_test_results)
     output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
     return output_dict
 
@@ -127,35 +130,25 @@ def read_solution(solution_path):
     return data
 
 
-def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
+def parse_test_results(raw_test_results: list) -> dict:
     test_results = dict()
     test_results["failed_test_cases"] = dict()
-    raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     i = 0
-    if len(raw_test_results) > 2:
-        test_results["run_status"] = "SUCCESS"
-        while i < len(raw_test_results):
-            line = raw_test_results[i]
-
-            if "version" in line:
-                test_results["junit_version"] = line.split()[-1]
-            elif "Time" in line:
-                test_results["time"] = float(line.split()[-1])
-            elif "Failures" in line:
-                fails = int(line.split()[-1])
-                successes = int(line.split()[2][:2]) - fails
-                test_results["failure_count"] = fails
-                test_results["success_count"] = successes
-            elif re.search(r"\d+\) ", line):
-                failed_test_cases = test_results["failed_test_cases"]
-                i = parse_test_cases(raw_test_results, failed_test_cases, i)
-
-            i += 1
-    else:
-        test_results["run_status"] = "FAILURE"
-        test_results["failure_count"] = 16
-        test_results["success_count"] = 0
-        i += 2
+    while i < len(raw_test_results):
+        line = raw_test_results[i]
+        if "version" in line:
+            test_results["junit_version"] = line.split()[-1]
+        elif "Time" in line:
+            test_results["time"] = float(line.split()[-1])
+        elif "Failures" in line:
+            fails = int(line.split()[-1])
+            successes = int(line.split()[2][:2]) - fails
+            test_results["failure_count"] = fails
+            test_results["success_count"] = successes
+        elif re.search(r"\d+\) ", line):
+            failed_test_cases = test_results["failed_test_cases"]
+            i = parse_test_cases(raw_test_results, failed_test_cases, i)
+        i += 1
 
     return test_results
 
