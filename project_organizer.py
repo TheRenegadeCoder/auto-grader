@@ -241,12 +241,25 @@ def successful_run_count(grade_report: dict):
     :param grade_report: the grade report dictionary
     :return: None
     """
-    success = 0
-    for student in grade_report["students"]:
-        if grade_report["students"][student]["run_status"] == "SUCCESS":
-            success += 1
-    grade_report["successful_runs"] = success
-    grade_report["failing_runs"] = len(grade_report["students"]) - success
+    successful_runs = 0
+    total_passed_test_cases = 0
+    total_failed_test_cases = 0
+    students = grade_report["students"]
+    for student in students:
+        student_data = students[student]
+        if student_data["run_status"] == "SUCCESS":
+            successful_runs += 1
+            passed_test_cases = student_data["execution_stdout"]["success_count"]
+            failed_test_cases = student_data["execution_stdout"]["failure_count"]
+            total_passed_test_cases += passed_test_cases
+            total_failed_test_cases += failed_test_cases
+    failed_runs = len(grade_report["students"]) - successful_runs
+    skipped_test_cases = ((total_failed_test_cases + total_passed_test_cases) / successful_runs) * failed_runs
+    grade_report["successful_runs"] = successful_runs
+    grade_report["failing_runs"] = failed_runs
+    grade_report["passed_test_cases"] = total_passed_test_cases
+    grade_report["failed_test_cases"] = total_failed_test_cases
+    grade_report["skipped_test_cases"] = skipped_test_cases
 
 
 def get_author_name(file_path: str) -> str:
