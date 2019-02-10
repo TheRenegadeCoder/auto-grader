@@ -133,6 +133,11 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess,
 
 
 def calculate_grade(student: dict) -> float:
+    """
+    Gives a grade estimate for the student.
+    :param student: a student's data
+    :return: a grade estimate
+    """
     if student["run_status"] == "FAILURE":
         grade_estimate = 0
     else:
