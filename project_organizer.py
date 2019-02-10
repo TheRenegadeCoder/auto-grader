@@ -122,7 +122,7 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess, exec
 
 def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
     test_results = dict()
-    test_results["failed_test_cases"] = list()
+    test_results["failed_test_cases"] = dict()
     raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     i = 0
     while i < len(raw_test_results):
@@ -134,19 +134,29 @@ def parse_test_results(execution_results: subprocess.CompletedProcess) -> dict:
             test_results["time"] = line.split()[-1]
         elif "Failures" in line:
             test_results["failure_count"] = line.split()[-1]
-        elif re.search(r"\d+\)", line):
-            parse_test_cases(raw_test_results, test_results, i)
+        elif re.search(r"\d+\) ", line):
+            failed_test_cases = test_results["failed_test_cases"]
+            i = parse_test_cases(raw_test_results, failed_test_cases, i + 1)
 
         i += 1
 
     return test_results
 
 
-def parse_test_cases(raw_test_results: list, test_results, index: int) -> int:
-    test_cases = dict()
-    # test_results["failed_test_cases"].append(test_case)
-    # TODO
-    return index
+def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int) -> int:
+    test_case = raw_test_results[index].split()[-1]
+    failed_test_cases[test_case] = dict()
+    line = raw_test_results[index]
+    failed_test_cases[test_case]["trace"] = list()
+    while not re.search(r"\d+\) ", line):
+        if "\t" in line:
+            failed_test_cases[test_case]["trace"].append(line)
+        elif "expected" in line:
+            comparison = line.split()
+            failed_test_cases[test_case]["expected"] = comparison[2].replace("expected:", "")
+            failed_test_cases[test_case]["was"] = comparison[-1].replace("was:", "")
+        index += 1
+    return index - 1
 
 
 def write_to_file(results, grade_report: dict):
