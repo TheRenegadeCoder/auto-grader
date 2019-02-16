@@ -173,11 +173,12 @@ def parse_test_results(raw_test_results: list) -> dict:
         line = raw_test_results[i]
         if "version" in line:
             test_results["junit_version"] = line.split()[-1]
-        elif "Time" in line:
+        elif "Time:" in line:
             test_results["time"] = float(line.split()[-1])
-        elif "Failures" in line:
+        elif "Failures:" in line:
             fails = int(line.split()[-1])
-            successes = int(line.split()[2][:2]) - fails
+            successes_string = line.split()[2]
+            successes = int(successes_string[:successes_string.index(",")]) - fails
             test_results["failure_count"] = fails
             test_results["success_count"] = successes
         elif "OK (" in line: # Passed all tests
