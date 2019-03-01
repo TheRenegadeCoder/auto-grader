@@ -102,7 +102,6 @@ def grade_file(classes: str, build_file: str, test_class: str) -> dict:
     :param classes: a directory contain files under test
     :param build_file: a file to test
     :param test_class: the path to the test file
-    :param results: the results file
     :return: None
     """
     classpath = "C:\\Program Files\\JUnit\\junit-4.13-beta-2.jar;C:\\Program Files\\JUnit\\hamcrest-all-1.3.jar;"
