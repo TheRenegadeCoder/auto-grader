@@ -84,15 +84,19 @@ def run_command(command: str) -> subprocess.CompletedProcess:
     :param command: a string command
     :return: the completed process object after execution5
     """
-    result = subprocess.run(
-        command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
+    try:
+        result = subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=60  # 1 minute
+        )
+    except subprocess.TimeoutExpired as e:
+        result = subprocess.CompletedProcess(command, 27, stdout=e.stdout, stderr=e.stderr)
     return result
 
 
-def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
+def grade_file(classes: str, build_file: str, test_class: str) -> dict:
     """
     Grades a file.
     :param classes: a directory contain files under test
@@ -106,8 +110,7 @@ def grade_file(classes: str, build_file: str, test_class: str, results) -> dict:
     compile_junit(classes, classpath, build_file)
     compilation_results = compile_junit(classes, classpath, test_class)
     execution_results = test_junit(classes, classpath, get_test_name(test_class))
-    student_grade_report = generate_student_json(compilation_results, execution_results, build_file)
-    return student_grade_report
+    return generate_student_json(compilation_results, execution_results, build_file)
 
 
 def generate_student_json(compilation_results: subprocess.CompletedProcess,
@@ -119,16 +122,21 @@ def generate_student_json(compilation_results: subprocess.CompletedProcess,
     :param build_file: path to solution
     :return: the data dictionary
     """
-    raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
     output_dict = dict()
     output_dict["path"] = build_file
-    output_dict["run_status"] = "SUCCESS" if len(raw_test_results) > 2 else "FAILURE"
     output_dict["solution"] = read_solution(build_file)
     output_dict["compilation_stdout"] = compilation_results.stdout.decode("utf-8")
     output_dict["compilation_stderr"] = compilation_results.stderr.decode("utf-8")
-    output_dict["execution_stdout"] = parse_test_results(raw_test_results)
     output_dict["execution_stderr"] = execution_results.stderr.decode("utf-8")
-    output_dict["grade_estimate"] = calculate_grade(output_dict)
+    if execution_results.returncode == 27:
+        output_dict["run_status"] = "FAILURE"
+        output_dict["execution_stdout"] = execution_results.stdout.decode("utf-8")
+        output_dict["grade_estimate"] = 0
+    else:
+        raw_test_results = execution_results.stdout.decode("utf-8").splitlines()
+        output_dict["run_status"] = "SUCCESS" if len(raw_test_results) > 2 else "FAILURE"
+        output_dict["execution_stdout"] = parse_test_results(raw_test_results)
+        output_dict["grade_estimate"] = calculate_grade(output_dict)
     return output_dict
 
 
@@ -254,7 +262,7 @@ def automate_grading(root: str):
                 author_name = get_author_name(file_path)
                 classes = os.path.join(test_dir, author_name, file_name.split(".")[0])
                 pathlib.Path(classes).mkdir(parents=True, exist_ok=True)
-                student_grade_report = grade_file(classes, file_path, test_class, results)
+                student_grade_report = grade_file(classes, file_path, test_class)
                 grade_report["students"][author_name] = student_grade_report
         report_meta_data(grade_report)
         write_to_file(results, grade_report)
