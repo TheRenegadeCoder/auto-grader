@@ -145,7 +145,10 @@ def calculate_grade(student: dict) -> float:
         failed_tests = test_data["failure_count"]
         passed_tests = test_data["success_count"]
         total_tests = failed_tests + passed_tests
-        grade_estimate = (passed_tests / total_tests) * 10
+        try:
+            grade_estimate = (passed_tests / total_tests) * 10
+        except ZeroDivisionError:
+            grade_estimate = 0
     return grade_estimate
 
 
