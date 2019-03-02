@@ -191,7 +191,7 @@ def parse_test_results(raw_test_results: list) -> dict:
             successes = int(successes_string[:successes_string.index(",")]) - fails
             test_results["failure_count"] = fails
             test_results["success_count"] = successes
-        elif "OK (" in line: # Passed all tests
+        elif "OK (" in line:  # Passed all tests
             test_results["failure_count"] = 0
             test_results["success_count"] = int(line.split()[1][1:])
         elif re.search(r"\d+\) ", line):
@@ -267,6 +267,25 @@ def automate_grading(root: str):
         write_to_file(results, grade_report)
 
 
+def _rank_students(grade_report: dict) -> list:
+    """
+    A helper function which ranks students by performance for ease of grading.
+    It's much easier to work from highest performing to lowest performing in my
+    opinion. There's less of a context switching issue since students with similar
+    issues will likely be grouped together by grade.
+
+    :param grade_report: the entire grade report as a dictionary
+    :return: a list of students in the order of the performance (best first)
+    """
+    output = list()
+    students_dict = grade_report["students"]
+    students = sorted(students_dict, key=lambda x: students_dict.get(x).get("grade_estimate"), reverse=True)
+    for index, student in enumerate(students):
+        student_rank = "%s (%d)" % (student, students_dict[student].get("grade_estimate"))
+        output.append(student_rank)
+    return output
+
+
 def report_meta_data(grade_report: dict):
     """
     Adds some meta data to the report such as the number of successful runs.
@@ -292,6 +311,7 @@ def report_meta_data(grade_report: dict):
     grade_report["passed_test_cases"] = total_passed_test_cases
     grade_report["failed_test_cases"] = total_failed_test_cases
     grade_report["skipped_test_cases"] = int(skipped_test_cases)
+    grade_report["rank"] = _rank_students(grade_report)
 
 
 def get_author_name(file_path: str) -> str:
