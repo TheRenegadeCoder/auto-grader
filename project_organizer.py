@@ -221,7 +221,7 @@ def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int
             failed_test_cases[test_case]["trace"].append(line.replace("\t", ""))
         elif "expected" in line:
             comparison = line.split()
-            failed_test_cases[test_case]["message"] = comparison[:-3]
+            failed_test_cases[test_case]["message"] = " ".join(comparison[:-3])
             failed_test_cases[test_case]["expected"] = comparison[-3].replace("expected:", "")
             failed_test_cases[test_case]["was"] = comparison[-1].replace("was:", "")
         index += 1
