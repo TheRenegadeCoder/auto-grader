@@ -220,10 +220,12 @@ def parse_test_cases(raw_test_results: list, failed_test_cases: dict, index: int
         if "\t" in line:
             failed_test_cases[test_case]["trace"].append(line.replace("\t", ""))
         elif "expected" in line:
-            comparison = line.split()
-            failed_test_cases[test_case]["message"] = " ".join(comparison[:-3])
-            failed_test_cases[test_case]["expected"] = comparison[-3].replace("expected:", "")
-            failed_test_cases[test_case]["was"] = comparison[-1].replace("was:", "")
+            message = line[:line.find("expected")]
+            expected = line[line.find("expected:") + 9: line.find("but")]
+            was = line[line.find("was:") + 4:]
+            failed_test_cases[test_case]["message"] = message
+            failed_test_cases[test_case]["expected"] = expected
+            failed_test_cases[test_case]["was"] = was
         index += 1
         line = raw_test_results[index]
     return index - 1
