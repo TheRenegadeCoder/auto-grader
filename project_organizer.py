@@ -165,7 +165,7 @@ def read_solution(solution_path):
     :param solution_path: path to the solution
     :return: the solution as a list of lines
     """
-    with open(solution_path) as solution:
+    with open(solution_path, encoding="utf8") as solution:
         data = solution.readlines()
     return data
 
