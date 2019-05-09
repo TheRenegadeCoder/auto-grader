@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.6"
+
+script:
+  - pytest
+
+deploy:
+  provider: pypi
+  user: ${PYPI_USERNAME}
+  password: ${PYPI_PASSWORD}
+  on:
+    tags: true
+
+notifications:
+  email: false
