@@ -1,5 +1,5 @@
 import unittest
-from Tools import project_organizer
+from grade import project_organizer
 
 
 class TestProjectOrganizer(unittest.TestCase):
